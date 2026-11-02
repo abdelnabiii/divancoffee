@@ -1,0 +1,43 @@
+LIVE: menuRoot text after 18s: "النت فاصل أو السيرفر مش بيرد، جرّب تاني\n\nجرّب تاني"
+LIVE: demoBar hidden=true skeletons=0
+LIVE console: [reqfail] https://dergispbnahqslvcvwuz.supabase.co/rest/v1/rpc/get_catalog net::ERR_TUNNEL_CONNECTION_FAILED
+   [error] Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED
+LIVE admin login error: "النت فاصل أو السيرفر مش بيرد، جرّب تاني"
+DEMO 360px: rows=58 scrollW=363/360 overflow=["button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]"] errs=0
+  sheet overflow=["button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]","button.row# [-3,344]"]
+DEMO 390px: rows=58 scrollW=390/390 overflow=[] errs=0
+  sheet overflow=[]
+DEMO 768px: rows=58 scrollW=768/768 overflow=[] errs=0
+  sheet overflow=[]
+DEMO 1280px: rows=58 scrollW=1280/1280 overflow=[] errs=0
+  sheet overflow=[]
+FLOW required-option toast: لازم تختار السكر
+FLOW product total (2x Turkish double): 80 ج
+FLOW blend 1/4kg + spiced + dark: 300 ج (expected (800+80+80)*0.25=240)
+FLOW cartbar: 3 كمّل طلبك 380 ج
+FLOW coupon msg: خصم 10%
+FLOW sum: المجموع 380 ج خصم DIVAN10 −38 ج التوصيل 30 ج الإجمالي 372 ج
+FLOW picker info: ✓ جوه منطقة التوصيل · 0 كم; tiles loaded=6
+FLOW loc box: في منطقة التوصيل على بُعد 0 كم من الكافيه تعديل
+FLOW track: طلبك وصلنا ✓ #1001 توصيل · ١٠:٣٥ ص استلمنا بنحضّر في الطريق اتسلّم 2× قهوة تركي دوبل (مظبوط) 80 ج 1× توليفة سبيشيال (ربع كيلو، محوّج، غامق، مطحون ناعم) 300 ج خصم −38 ج التوصيل 30 ج الإجمالي 372 ج
+FLOW after register header beans: 0
+FLOW pickup earn line: المجموع 65 ج الإجمالي 65 ج هتكسب بعد الاستلام +6 حبّة
+FLOW pickup track: طلبك وصلنا ✓ #1002 استلام من الكافيه · ١٠:٣٥ ص استلمنا بنحضّر جاهز اتسلّم 1× لاتيه 65 ج الإجمالي 65 ج هيتضافلك 6 حبّة أول ما تستلم الطلب
+FLOW change pw toast: الباسورد اتغيّر
+FLOW errors: []
+TABLE banner: إنت على ترابيزة رقم 7 — اطلب من هنا وهنجيبلك لحد عندك; modes=ترابيزة 7
+TABLE ?table=7 banner hidden=false (app reads ?t= only)
+ADMIN demo bar: نسخة عرض — باسورد الدخول: divan2026
+ADMIN orders cards: 2
+ADMIN injected <img src=x> elements: 0
+ADMIN after done: المطلوب تحصيله 65 ج حبّات العميل اتضاف 6
+ADMIN menu: المنيو قسم صنف المشروبات الساخنة (19) تعديل القسم قهوة تركي سنجل 25 ج · 1 اختيارات متاح قهوة تركي دوبل ★ 40 ج · 1 اختيارات متاح قهوة فرنساوي
+ADMIN coupons: الكوبونات كود جديد الكود الخصم أقل طلب الاستخدام ينتهي الحالة DIVAN10 10% 100 ج 1 — شغال 
+ADMIN customers: العملاء العميل الحبّات طلبات صرف <img src=x onerror=alert(1)>سارة 01112223334 6 1 65 ج حبّات باسورد
+ADMIN reports: التقارير النهارده امبارح آخر 7 أيام الشهر ده المبيعات 437 ج عدد الطلبات 2 متوسط الطلب 218.50 ج اتلغى 0 الأكثر مبيعًا قهوة تركي دوبل 2 · 80 ج
+ADMIN settings: الإعدادات استقبال الطلبات استقبال الطلبات الأونلاين اقفله لو الكافيه مقفول أو زحمة التوصيل الاستلام من الكافيه الطلب من الترابيزة (QR) مصاري
+ADMIN customers row: العميل الحبّات طلبات صرف <img src=x onerror=alert(1)>سارة 01112223334 6 1 65 ج حبّات باسورد
+ADMIN product save toast: اتحفظ
+ADMIN 360px overflow scrollW=360/360 []
+ADMIN 768px overflow scrollW=768/768 []
+ADMIN errors: []
