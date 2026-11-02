@@ -1,0 +1,36 @@
+# ديفان كوفي — إعدادات الاستضافة
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_headers.c>
+  # الصفحات نفسها مابتتخزنش، عشان أي تحديث يوصل للعملاء على طول
+  <FilesMatch "\.(html|webmanifest)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # الملفات اللي عليها ?v= بتتخزن، ولما نحدّث بنغيّر الرقم
+  <FilesMatch "\.(css|js|woff2|webp|png|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "admin\.html$">
+    Header set X-Robots-Tag "noindex, nofollow"
+    Header set X-Frame-Options "DENY"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/manifest+json image/svg+xml
+</IfModule>
+
+AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2
+AddType image/webp .webp
+
+# تحويل لـ https
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} !^localhost
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>

@@ -1,0 +1,10 @@
+@font-face { font-family: "Reem Kufi"; font-weight: 600 700; font-display: swap; src: url(../fonts/reem-kufi-arabic-700-normal.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Reem Kufi"; font-weight: 600 700; font-display: swap; src: url(../fonts/reem-kufi-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF; }
+@font-face { font-family: "Readex Pro"; font-weight: 400; font-display: swap; src: url(../fonts/readex-pro-arabic-400-normal.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Readex Pro"; font-weight: 400; font-display: swap; src: url(../fonts/readex-pro-latin-400-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Readex Pro"; font-weight: 500; font-display: swap; src: url(../fonts/readex-pro-arabic-500-normal.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Readex Pro"; font-weight: 500; font-display: swap; src: url(../fonts/readex-pro-latin-500-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Readex Pro"; font-weight: 600; font-display: swap; src: url(../fonts/readex-pro-arabic-600-normal.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Readex Pro"; font-weight: 600; font-display: swap; src: url(../fonts/readex-pro-latin-600-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+@font-face { font-family: "Readex Pro"; font-weight: 700; font-display: swap; src: url(../fonts/readex-pro-arabic-700-normal.woff2) format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Readex Pro"; font-weight: 700; font-display: swap; src: url(../fonts/readex-pro-latin-700-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }

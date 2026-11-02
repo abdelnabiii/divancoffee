@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ديفان كوفي | قهوتك على كيفك — اطلب أونلاين</title>
+<meta name="description" content="ديفان كوفي في X Mall — البنفسج 10، التجمع الخامس. اطلب قهوتك ومشروباتك أونلاين توصيل أو استلام، واكسب حبّات على كل طلب.">
+<meta name="theme-color" content="#961a12">
+<meta property="og:title" content="ديفان كوفي — قهوتك على كيفك">
+<meta property="og:description" content="اطلب أونلاين من ديفان كوفي، التجمع الخامس. 10% حبّات على كل طلب.">
+<meta property="og:image" content="assets/icon-512.png">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preload" href="fonts/readex-pro-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/reem-kufi-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css?v=4">
+<link rel="stylesheet" href="css/app.css?v=4">
+</head>
+<body>
+<div class="demo" id="demoBar" hidden>نسخة عرض — الطلبات بتتحفظ على الجهاز ده بس</div>
+<div class="tableban" id="tableBan" hidden></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="ديفان كوفي — الصفحة الرئيسية"><img src="assets/logo-cream.webp" alt="ديفان كوفي" width="52" height="44"></a>
+    <span class="status" id="openStatus">بنستقبل طلبات</span>
+    <button class="tbtn beanpill" id="beanBtn" type="button" aria-label="حبّاتي"></button>
+    <button class="tbtn" id="acctBtn" type="button" aria-label="حسابي"></button>
+    <button class="tbtn" id="cartBtn" type="button" aria-label="السلة"><span class="badge num" id="cartCount" hidden>0</span></button>
+  </div>
+</header>
+
+<section class="hero grain">
+  <div class="beanbg"></div>
+  <div class="wrap">
+    <div class="left" id="heroArt"></div>
+    <div class="right" style="display:grid;gap:14px">
+      <img class="logo" src="assets/logo-cream.webp" alt="ديفان كوفي" width="330" height="283">
+      <div id="sprig"></div>
+      <h1 class="tag">قهوتك على كيفك</h1>
+      <p class="sub">بنختار أجود أنواع البن ونحمّصه باحتراف — اطلب مشروبك وهيوصلك سخن، أو تعالى استلمه جاهز.</p>
+      <div class="modes" id="modes" role="group" aria-label="طريقة الطلب"></div>
+      <div class="ctas"><a class="cta" href="#menu">شوف المنيو واطلب</a><a class="ghost" href="#visit" id="heroMap"></a></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap loyal">
+  <div class="card">
+    <div class="beans3" id="beans3"></div>
+    <div><b id="loyTitle">10% حبّات على كل طلب</b><small id="loySub">الحبّة بجنيه، تخصمها من طلبك الجاي</small></div>
+    <button type="button" id="loyBtn">ابدأ</button>
+  </div>
+</div>
+
+<div class="wrap" id="popWrap" hidden>
+  <h2 class="sec-title">الأكثر طلبًا</h2>
+  <div class="pop" id="pop"></div>
+</div>
+
+<nav class="rail" aria-label="أقسام المنيو"><div class="wrap" id="rail"></div></nav>
+
+<main id="menu" class="wrap">
+  <div id="menuRoot"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <section class="cat" id="originsSec" hidden>
+    <h2 class="sec-title">متوفر لدينا كمان</h2>
+    <div class="origins" id="origins"></div>
+    <a class="ask" id="askBeans" target="_blank" rel="noopener"></a>
+  </section>
+</main>
+
+<section class="visit grain" id="visit">
+  <div class="wrap">
+    <a class="mapcard" id="mapCard" target="_blank" rel="noopener" aria-label="افتح مكان ديفان كوفي على جوجل ماب">
+      <svg class="map" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="400" height="250" fill="#f1e2c9"/>
+        <g fill="#e6d2b2"><rect x="18" y="16" width="96" height="62" rx="6"/><rect x="132" y="16" width="70" height="62" rx="6"/><rect x="286" y="16" width="96" height="62" rx="6"/>
+        <rect x="18" y="170" width="70" height="64" rx="6"/><rect x="106" y="170" width="96" height="64" rx="6"/><rect x="286" y="170" width="96" height="64" rx="6"/><rect x="18" y="96" width="70" height="56" rx="6"/></g>
+        <rect x="300" y="96" width="82" height="56" rx="10" fill="#cfe0b9"/><circle cx="330" cy="118" r="7" fill="#b6cf9c"/><circle cx="352" cy="132" r="9" fill="#b6cf9c"/>
+        <rect x="106" y="96" width="176" height="56" rx="8" fill="#e9c9b4" stroke="#961a12" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="194" y="132" text-anchor="middle" font-family="Readex Pro, sans-serif" font-size="15" font-weight="700" fill="#961a12">X Mall</text>
+        <g stroke="#fff" stroke-linecap="round"><path d="M0 87h400" stroke-width="14"/><path d="M0 161h400" stroke-width="14"/><path d="M123 0v250" stroke-width="12"/><path d="M276 0v250" stroke-width="12"/><path d="M212 0v87M212 161v89" stroke-width="7"/></g>
+        <text x="390" y="166" text-anchor="end" font-family="Readex Pro, sans-serif" font-size="10" fill="#8b6455">شارع د. أحمد عكاشة</text>
+        <text x="16" y="92" font-family="Readex Pro, sans-serif" font-size="10" fill="#8b6455">البنفسج 10</text>
+      </svg>
+      <span class="pinbox"><span class="lbl">ديفان كوفي</span><svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M12 22s7-6.6 7-12.5A7 7 0 0 0 5 9.5C5 15.4 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.6" fill="#f6e7d2" stroke="none"/></svg></span>
+      <span class="open" id="mapOpen"></span>
+    </a>
+    <div class="info">
+      <h2>نوّرنا في الكافيه</h2>
+      <p>قهوتنا مش مجرد مشروب، دي تجربة كاملة على كيفك.</p>
+      <div class="lines" id="visitLines"></div>
+      <div class="socials" id="socials"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img src="assets/logo-cream.webp" alt="" width="63" height="54">
+  <div class="num" id="handle"></div>
+  <small id="credit"></small>
+</footer>
+
+<div class="cartbar" id="cartBar" hidden><button type="button" id="cartBarBtn"><span class="cnt num" id="cbCount">0</span><span>كمّل طلبك</span><span class="tot num" id="cbTotal"></span></button></div>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="vendor/supabase.min.js?v=4"></script>
+<script src="js/config.js?v=4"></script>
+<script src="js/seed.js?v=4"></script>
+<script src="js/engine.js?v=4"></script>
+<script src="js/art.js?v=4"></script>
+<script src="js/api.js?v=4"></script>
+<script src="js/app.js?v=4"></script>
+</body>
+</html>

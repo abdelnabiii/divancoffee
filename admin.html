@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة التحكم — ديفان كوفي</title>
+<meta name="theme-color" content="#961a12">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="css/fonts.css?v=4">
+<link rel="stylesheet" href="css/admin.css?v=4">
+</head>
+<body>
+<div class="demo" id="demoBar" hidden>نسخة عرض — باسورد الدخول: divan2026</div>
+
+<section class="login" id="loginView" hidden>
+  <form id="loginForm" novalidate>
+    <img src="assets/logo-red.webp" alt="ديفان كوفي" width="89" height="76">
+    <h1>لوحة التحكم</h1>
+    <div id="loginErr"></div>
+    <div class="field"><label for="lEmail">الإيميل</label><input type="email" id="lEmail" autocomplete="username" dir="ltr" required></div>
+    <div class="field"><label for="lPass">الباسورد</label><input type="password" id="lPass" autocomplete="current-password" required></div>
+    <button class="btn block" id="lBtn" style="margin-top:8px">دخول</button>
+  </form>
+</section>
+
+<div class="app" id="appView" hidden>
+  <aside class="side">
+    <div class="brand"><img src="assets/logo-cream.webp" alt="ديفان كوفي" width="70" height="60"></div>
+    <nav id="nav"></nav>
+    <div class="who"><div id="whoName">أدمن</div><button type="button" id="logoutBtn">خروج</button></div>
+  </aside>
+  <main class="main" id="view"></main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<div id="printArea" hidden></div>
+
+<script src="vendor/supabase.min.js?v=4"></script>
+<script src="vendor/qrcode.js?v=4"></script>
+<script src="js/config.js?v=4"></script>
+<script src="js/seed.js?v=4"></script>
+<script src="js/engine.js?v=4"></script>
+<script src="js/art.js?v=4"></script>
+<script src="js/api.js?v=4"></script>
+<script src="js/admin.js?v=4"></script>
+</body>
+</html>
