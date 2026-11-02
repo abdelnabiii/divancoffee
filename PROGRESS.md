@@ -13,6 +13,8 @@
 - `js/api.js`: understands the `{_err}` reply that `login` uses (so failed attempts are recorded).
 - Browser check: customer site on the local backend loads 58 items, places a pickup order, shows Arabic login errors, 0 console errors (`audit/phase1-local-order.jpg`).
 
+- `tools/preview.js`: zero-dependency local preview server (demo mode by default, `--live` for the configured Supabase).
+
 ## Blocked
 - This environment can't reach `*.supabase.co` and has no Supabase MCP → you run the SQL and the test script; I hand you exact steps.
 
