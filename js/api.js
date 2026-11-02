@@ -17,6 +17,8 @@
       if (!live) return await DV.demoBackend.rpc(name, args);
       const { data, error } = await sb.rpc(name, args || {});
       if (error) throw error;
+      // login بيرجّع غلطه كـ {_err} عشان محاولات الدخول الغلط تتسجّل (supabase/schema.sql)
+      if (data && typeof data === "object" && !Array.isArray(data) && data._err) throw new Error(data._err);
       return data;
     } catch (e) { throw new Error(friendly(e)); }
   }
