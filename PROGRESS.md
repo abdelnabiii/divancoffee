@@ -18,10 +18,14 @@
 - Phase 2 front-end fixes F3–F15 + new F19–F21 (see `AUDIT.md` → Fix status). `?v=5`. Browser regression `tests/site.e2e.js`: 52/52 on Apache 2.4 with the real `.htaccess` + CSP; RPC suite still 131/131.
 - Share image `assets/share-1200x630.jpg` (from `tools/share-image.html`), maskable icons, `sitemap.xml`, JSON-LD, `tools/set-domain.js`.
 
+- Phase 3 started: `MISSING.md` (58 photos popular-first, assets, values to confirm). Photo pipeline `tools/add-photo.py` (WebP ≤900 px q85 → `assets/menu/<id>.webp`, updates `seed.js`, `schema.sql` seed and `supabase/photos.sql`) + `tools/photo-shot.js` (before/after). Dry-run verified, then reverted.
+- Site address: you said continue → left as `%SITE_URL%` placeholder (fill with `node tools/set-domain.js https://…`).
+
 ## Blocked
 - This environment can't reach `*.supabase.co` and has no Supabase MCP → you run the SQL and the test script; I hand you exact steps.
 
 ## Waiting on you
 - Create the new Supabase project and send the project URL + anon (or publishable) key.
-- The site's public address (for canonical / share tags / sitemap) — asked.
+- Photos, one at a time (now: #1 قهوة تركي دوبل).
+- Site address — later.
 - Next questions (one at a time): keep the demo coupon `DIVAN10`? · admin email.

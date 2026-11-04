@@ -124,6 +124,11 @@
     ]
   };
 
+  /* صور الأصناف (assets/menu/<id>.webp) — بيتعدّل بـ tools/add-photo.py */
+  const IMAGES = {
+  };
+  products.forEach(p => { if (IMAGES[p.id]) p.image = IMAGES[p.id]; });
+
   const SEED = { categories, products, settings };
   if (typeof module !== "undefined" && module.exports) module.exports = SEED;
   else root.DV_SEED = SEED;
