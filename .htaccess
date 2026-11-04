@@ -1,36 +1,58 @@
-# ديفان كوفي — إعدادات الاستضافة
+# ديفان كوفي — إعدادات الاستضافة (cPanel / Apache)
 Options -Indexes
 DirectoryIndex index.html
-
-<IfModule mod_headers.c>
-  # الصفحات نفسها مابتتخزنش، عشان أي تحديث يوصل للعملاء على طول
-  <FilesMatch "\.(html|webmanifest)$">
-    Header set Cache-Control "no-cache, must-revalidate"
-  </FilesMatch>
-  # الملفات اللي عليها ?v= بتتخزن، ولما نحدّث بنغيّر الرقم
-  <FilesMatch "\.(css|js|woff2|webp|png|svg)$">
-    Header set Cache-Control "public, max-age=604800"
-  </FilesMatch>
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  <FilesMatch "admin\.html$">
-    Header set X-Robots-Tag "noindex, nofollow"
-    Header set X-Frame-Options "DENY"
-  </FilesMatch>
-</IfModule>
-
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/manifest+json image/svg+xml
-</IfModule>
+ServerSignature Off
 
 AddType application/manifest+json .webmanifest
 AddType font/woff2 .woff2
 AddType image/webp .webp
+AddDefaultCharset utf-8
 
-# تحويل لـ https
+# ---------- https ----------
+# بيحوّل لـ https. شرط X-Forwarded-Proto عشان مايحصلش لوب لو في Cloudflare أو بروكسي قدام الاستضافة.
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteCond %{HTTPS} off
-  RewriteCond %{HTTP_HOST} !^localhost
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # ملفات التطوير مالهاش مكان على السيرفر لو اترفعت بالغلط
+  RewriteRule ^(\.git|tests|tools|supabase|audit|node_modules)(/|$) - [F,L]
+  RewriteRule (^|/)(README|DEPLOY|CHANGELOG|AUDIT|PROGRESS|MISSING)\.md$ - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # ---------- الكاش ----------
+  # الصفحات نفسها مابتتخزنش، عشان أي تحديث يوصل للعملاء على طول
+  <FilesMatch "\.(html|webmanifest|xml|txt)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # الملفات اللي عليها ?v= بتتخزن أسبوع، ولما نحدّث بنغيّر الرقم
+  <FilesMatch "\.(css|js|woff2|webp|png|jpe?g|svg)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # ---------- الأمان ----------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "geolocation=(self), camera=(), microphone=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  # HSTS بس لما الطلب جاي على https (أول ما الـ SSL يشتغل)
+  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on' || %{HTTP:X-Forwarded-Proto} == 'https'"
+  # CSP: الملفات من الموقع نفسه + Supabase (الداتا والصور) + خرايط OpenStreetMap.
+  # wa.me و tel: و maps.google لينكات عادية مش محتاجة إذن هنا.
+  # 'unsafe-inline' للـ style بس (الكود بيستخدم style="" و Leaflet كمان) — السكريبتات inline ممنوعة.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co https://tile.openstreetmap.org; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; manifest-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+
+  # لوحة التحكم: مابتتأرشفش ومابتتفتحش جوه frame
+  <FilesMatch "^admin\.html$">
+    Header set X-Robots-Tag "noindex, nofollow"
+    Header always set X-Frame-Options "DENY"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json application/manifest+json image/svg+xml
 </IfModule>

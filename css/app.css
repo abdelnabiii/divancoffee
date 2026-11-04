@@ -66,7 +66,9 @@ a { color: inherit; }
 .ghost { display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid rgba(246,231,210,.5); color: var(--cream); border-radius: 14px; padding: 12px 20px; text-decoration: none; font-weight: 600; }
 .ghost svg { width: 18px; height: 18px; }
 .tableban { background: var(--gold); color: var(--ink); text-align: center; font-weight: 700; padding: 10px 16px; display: flex; gap: 8px; align-items: center; justify-content: center; }
-.tableban svg { width: 20px; height: 20px; }
+.tableban svg { width: 20px; height: 20px; flex: none; }
+.tableban { flex-wrap: wrap; row-gap: 4px; }
+.tableban button { font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; color: var(--ink); padding: 2px 6px; }
 @media (min-width: 860px) {
   .hero .wrap { grid-template-columns: 1.1fr .9fr; padding-block: 48px 60px; }
   .hero .left { order: 2; } .hero-art { width: 360px; }
@@ -112,8 +114,8 @@ a { color: inherit; }
 .label::before, .label::after { content: ""; position: absolute; top: 50%; width: 10px; height: 10px; border: 2px solid var(--red); background: var(--paper); transform: translateY(-50%) rotate(45deg); }
 .label::before { inset-inline-start: -8px; } .label::after { inset-inline-end: -8px; }
 .cart-h .ill { width: 46px; height: 46px; color: var(--red); flex: none; }
-.items { display: grid; gap: 2px 34px; }
-@media (min-width: 780px) { .items { grid-template-columns: 1fr 1fr; } }
+.items { display: grid; gap: 2px 34px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 780px) { .items { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .row { display: flex; align-items: center; gap: 12px; padding: 12px 6px; border-bottom: 1px dashed var(--line); text-align: start; width: 100%; border-radius: 10px; transition: background .15s; }
 .row:hover { background: var(--paper-2); }
 .row .plus { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--red); color: var(--red); display: grid; place-items: center; flex: none; transition: .15s; }
@@ -257,7 +259,7 @@ footer small { opacity: .65; display: block; margin-top: 6px; }
 .msg.ok { color: var(--ok); } .msg.bad { color: var(--red); }
 .err { background: #fde5dd; color: var(--red-2); padding: 10px 12px; border-radius: 12px; font-size: 14px; margin-bottom: 10px; }
 .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
-.empty .ill { width: 80px; height: 80px; margin: 0 auto 10px; color: var(--line); }
+.empty .ill, .empty > svg { display: block; width: 80px; height: 80px; margin: 0 auto 10px; color: var(--line); }
 .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); margin: -4px 0 12px; }
 .tabs button { padding: 10px 12px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
 .tabs button[aria-selected="true"] { color: var(--red); border-color: var(--red); }
@@ -319,3 +321,13 @@ footer small { opacity: .65; display: block; margin-top: 6px; }
 .pk-info { text-align: center; font-size: 14px; }
 .pk-info .okc { color: var(--ok); font-weight: 700; } .pk-info .outc { color: var(--red); font-weight: 700; }
 .pk-cafe span { display: block; background: var(--ink); color: var(--cream); font: 700 12px var(--body); padding: 3px 8px; border-radius: 8px; text-align: center; }
+
+/* تحميل المنيو */
+.loadnote { text-align: center; color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.loaderr p { margin: 0 0 14px; }
+.loaderr b { color: var(--ink); font-size: 17px; }
+.loaderr .btn { max-width: 220px; margin: 0 auto; flex: none; }
+.loaderr .alt { font-size: 14px; margin: 16px 0 0; }
+.loaderr .alt a { color: var(--red); font-weight: 600; }
+/* التوست فوق الشيت مش عليه */
+body.sheet-open .toast { top: calc(10px + env(safe-area-inset-top)); }

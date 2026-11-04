@@ -18,6 +18,10 @@
   let tableNo = null;
 
   const S = () => CAT.settings;
+  let loaded = false;
+  // أرقام التواصل: من الإعدادات، ولو لسه ما وصلتش (أو السيرفر واقع) من config.js
+  const WA = () => String(S().whatsapp || cfg.whatsapp || "").replace(/\D/g, "");
+  const TEL = () => String(S().phone || cfg.phone || "");
   const byId = id => CAT.products.find(p => p.id === id);
   const catOf = p => CAT.categories.find(c => c.id === p.category);
   const artFor = p => ART[(catOf(p) || {}).icon] || ART.cup;
@@ -33,7 +37,7 @@
     const t = parseInt(q.get("t") || h.get("t") || store.get("dv_table", { n: null, at: 0 }).n, 10);
     const saved = store.get("dv_table", null);
     if (q.get("t") || h.get("t")) store.set("dv_table", { n: t, at: Date.now() });
-    else if (saved && Date.now() - saved.at > 3 * 3600e3) { store.del("dv_table"); return; }
+    else if (saved && Date.now() - saved.at > 90 * 60e3) { store.del("dv_table"); return; }   // 90 دقيقة
     if (t > 0) tableNo = t;
   })();
 
@@ -44,6 +48,7 @@
     $("#beanBtn").innerHTML = ICON.bean + `<span class="num">${me ? me.points : 0}</span>`;
     $("#beanBtn").setAttribute("aria-label", me ? `حبّاتي: ${me.points}` : "حبّاتي");
     const st = $("#openStatus"); const on = !!S().accepting;
+    st.hidden = !loaded;
     st.textContent = on ? "بنستقبل طلبات" : "الطلب الأونلاين مقفول"; st.classList.toggle("off", !on);
     renderCartBar();
   }
@@ -80,8 +85,20 @@
     el.innerHTML = m.map(k => `<button type="button" data-m="${k}" aria-pressed="${form.type === k}">${MODES[k][1]}<span>${k === "table" ? "ترابيزة " + tableNo : MODES[k][0]}</span></button>`).join("");
     el.onclick = e => { const b = e.target.closest("button"); if (!b) return; form.type = b.dataset.m; saveForm(); renderModes(); };
     const tb = $("#tableBan");
-    if (tableNo && S().table_enabled) { tb.hidden = false; tb.innerHTML = ICON.table + `<span>إنت على ترابيزة رقم <b class="num">${tableNo}</b> — اطلب من هنا وهنجيبلك لحد عندك</span>`; }
+    if (tableNo && S().table_enabled) {
+      tb.hidden = false;
+      tb.innerHTML = ICON.table + `<span>إنت على ترابيزة رقم <b class="num">${tableNo}</b> — اطلب من هنا وهنجيبلك لحد عندك</span><button type="button" id="leaveTable">مش على ترابيزة؟</button>`;
+      $("#leaveTable").onclick = leaveTable;
+    }
     else tb.hidden = true;
+  }
+  /* العميل مسح QR الترابيزة وبعدين مشي — يرجع للتوصيل والاستلام */
+  function leaveTable() {
+    store.del("dv_table"); tableNo = null; form.type = ""; saveForm();
+    const u = new URL(location.href); u.searchParams.delete("t");
+    if (/(^|&)t=/.test(u.hash.slice(1))) u.hash = "";
+    history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+    renderModes(); toast("تمام — تقدر تطلب توصيل أو استلام");
   }
 
   /* ---------- المنيو ---------- */
@@ -128,7 +145,7 @@
     $("#originsSec").hidden = !o.length;
     $("#origins").innerHTML = o.map(x => `<div class="origin"><span class="ill">${ART.cup}</span><b>${esc(x.name)}</b><small>${esc(x.note || "")}</small></div>`).join("");
     const ask = $("#askBeans"); ask.innerHTML = ICON.wa + "<span>اسأل على الأسعار والكميات</span>";
-    ask.href = `https://wa.me/${S().whatsapp}?text=${encodeURIComponent("السلام عليكم، عايز أسأل على أسعار البن المتوفر عندكم")}`;
+    ask.href = `https://wa.me/${WA()}?text=${encodeURIComponent("السلام عليكم، عايز أسأل على أسعار البن المتوفر عندكم")}`;
     spy();
   }
   function rowHtml(p) {
@@ -177,11 +194,11 @@
     $("#mapOpen").innerHTML = ICON.pin + "<span>افتح على جوجل ماب</span>";
     $("#heroMap").href = cfg.mapUrl; $("#heroMap").target = "_blank"; $("#heroMap").rel = "noopener";
     $("#heroMap").innerHTML = ICON.pin + "<span>مكاننا</span>";
-    const tel = s.phone || cfg.phone;
+    const tel = TEL();
     $("#visitLines").innerHTML = `
       <a href="${esc(cfg.mapUrl)}" target="_blank" rel="noopener"><span class="ic">${ICON.pin}</span><span>${esc(cfg.address)}</span></a>
       ${tel ? `<a href="tel:${esc(tel)}"><span class="ic">${ICON.phone}</span><span class="num">${esc(tel)}</span></a>` : ""}
-      <a href="https://wa.me/${esc(s.whatsapp)}" target="_blank" rel="noopener"><span class="ic">${ICON.wa}</span><span>كلمنا واتساب</span></a>
+      <a href="https://wa.me/${WA()}" target="_blank" rel="noopener"><span class="ic">${ICON.wa}</span><span>كلمنا واتساب</span></a>
       ${s.hours ? `<div><span class="ic">${ICON.clock}</span><span>${esc(s.hours)}</span></div>` : ""}`;
     const so = cfg.social;
     $("#socials").innerHTML = [["facebook", ICON.fb, "فيسبوك"], ["instagram", ICON.ig, "إنستجرام"], ["tiktok", ICON.tt, "تيك توك"]]
@@ -210,7 +227,7 @@
     if (onSheetClose) { const f = onSheetClose; onSheetClose = null; f(); }
     sh.innerHTML = html; sh.hidden = false; sc.hidden = false;
     requestAnimationFrame(() => { sh.classList.add("on"); sc.classList.add("on"); });
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "hidden"; document.body.classList.add("sheet-open");
     onSheetClose = onClose || null;
     if (!sheetPushed) { history.pushState({ dvSheet: 1 }, ""); sheetPushed = true; }
     sh.querySelectorAll("[data-close]").forEach(b => b.onclick = closeSheet);
@@ -219,7 +236,7 @@
   }
   function hideSheet() {
     const sh = $("#sheet"), sc = $("#scrim");
-    sh.classList.remove("on"); sc.classList.remove("on"); document.body.style.overflow = "";
+    sh.classList.remove("on"); sc.classList.remove("on"); document.body.style.overflow = ""; document.body.classList.remove("sheet-open");
     if (onSheetClose) { const f = onSheetClose; onSheetClose = null; f(); }
     setTimeout(() => { if (!sh.classList.contains("on")) { sh.hidden = true; sc.hidden = true; sh.innerHTML = ""; } }, 280);
   }
@@ -337,7 +354,7 @@
     const scroll = body.scrollTop;
     const closed = !s.accepting;
     body.innerHTML = `
-      ${closed ? `<div class="closed-note">${ICON.clock}<span>الكافيه مش بيستقبل طلبات أونلاين دلوقتي. تقدر تكلمنا على <a href="tel:${esc(s.phone)}" class="num">${esc(s.phone)}</a></span></div>` : ""}
+      ${closed ? `<div class="closed-note">${ICON.clock}<span>الكافيه مش بيستقبل طلبات أونلاين دلوقتي. تقدر تكلمنا على <a href="tel:${esc(TEL())}" class="num">${esc(TEL())}</a></span></div>` : ""}
       <div id="cItems">${t.lines.map(({ it, p, line }) => `<div class="citem" data-k="${esc(it.key)}">
         <span class="ill">${illFor(p)}</span>
         <div class="t"><b>${esc(p.name)}</b><small>${esc(optText(p, it.sel))}${it.note ? ` — ${esc(it.note)}` : ""}</small>
@@ -394,7 +411,8 @@
     });
     $("#cpnBtn").onclick = async () => {
       if (coupon.ok) { coupon = { code: "", discount: 0, msg: "", ok: false }; return paintCart(); }
-      const code = $("#iCoupon").value.trim().toUpperCase(); if (!code) return toast("اكتب الكود");
+      const code = $("#iCoupon").value.trim().toUpperCase();
+      if (!code) { const had = !!coupon.code; coupon = { code: "", discount: 0, msg: "", ok: false }; paintCart(); return had ? toast("اتشال الكود") : toast("اكتب الكود"); }
       coupon.code = code; $("#cpnBtn").disabled = true; await recheckCoupon(); paintCart();
     };
     $("#iCoupon").onkeydown = e => { if (e.key === "Enter") $("#cpnBtn").click(); };
@@ -441,8 +459,8 @@
     if (window.L) return Promise.resolve();
     if (leafletP) return leafletP;
     leafletP = new Promise((res, rej) => {
-      const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "vendor/leaflet/leaflet.css"; document.head.appendChild(css);
-      const js = document.createElement("script"); js.src = "vendor/leaflet/leaflet.js"; js.onload = res; js.onerror = () => { leafletP = null; rej(); };
+      const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "vendor/leaflet/leaflet.css?v=5"; document.head.appendChild(css);
+      const js = document.createElement("script"); js.src = "vendor/leaflet/leaflet.js?v=5"; js.onload = res; js.onerror = () => { leafletP = null; rej(); };
       document.head.appendChild(js);
     });
     return leafletP;
@@ -458,17 +476,21 @@
     document.body.appendChild(el);
     const start = form.loc && DV.validLL(form.loc.lat, form.loc.lng) ? [form.loc.lat, form.loc.lng] : cafe;
     const map = L.map("pkMap", { zoomControl: true, attributionControl: true }).setView(start, form.loc ? 16 : 13);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
     L.circle(cafe, { radius: R * 1000, color: "#961a12", weight: 2, fillColor: "#961a12", fillOpacity: .06 }).addTo(map);
-    L.marker(cafe, { icon: L.divIcon({ className: "pk-cafe", html: `<span>ديفان</span>`, iconSize: [54, 26], iconAnchor: [27, 13] }) }).addTo(map);
+    L.marker(cafe, { icon: L.divIcon({ className: "pk-cafe", html: `<span>ديفان</span>`, iconSize: [54, 26], iconAnchor: [27, -8] }) }).addTo(map);
     window.__dvMap = map;
+    // الدبوس لازم يبقى في نص الخريطة بالظبط (مش نص الشاشة) — ده المكان اللي بيتحفظ
+    const mapEl = $("#pkMap"), pin = el.querySelector(".pk-pin");
+    const placePin = () => { pin.style.top = (mapEl.offsetTop + mapEl.offsetHeight / 2) + "px"; };
+    const ro = new ResizeObserver(placePin); ro.observe(mapEl); placePin();
     const info = () => {
       const c = map.getCenter(), d = Math.round(DV.distKm(cafe[0], cafe[1], c.lat, c.lng) * 10) / 10, ok = d <= R;
       $("#pkInfo").innerHTML = ok ? `<span class="okc">✓ جوه منطقة التوصيل</span> · <span class="num">${d}</span> كم` : `<span class="outc">✗ الزون ده مش متاح</span> · <span class="num">${d}</span> كم (الحد ${R} كم)`;
       $("#pkOk").disabled = !ok;
     };
     map.on("move", info); info();
-    const close = () => { map.remove(); el.remove(); window.__dvMap = null; };
+    const close = () => { ro.disconnect(); map.remove(); el.remove(); window.__dvMap = null; };
     $("#pkX").onclick = close;
     $("#pkOk").onclick = () => { const c = map.getCenter(); close(); setLoc(c.lat, c.lng); };
     $("#pkGps").onclick = () => navigator.geolocation && navigator.geolocation.getCurrentPosition(p => map.setView([p.coords.latitude, p.coords.longitude], 17),
@@ -530,7 +552,7 @@
       body.innerHTML = `<div class="track">
         ${fresh ? `<p style="margin:0;color:var(--ok);font-weight:700">طلبك وصلنا ✓</p>` : ""}
         <div class="no num">#${o.id}</div><small style="color:var(--muted)">${DV.TYPES[o.type]}${o.table_no ? " " + o.table_no : ""} · ${new Date(o.created_at).toLocaleTimeString("ar-EG", { hour: "numeric", minute: "2-digit" })}</small>
-        ${cancelled ? `<div class="err" style="margin-top:16px">الطلب ده اتلغى. لو في مشكلة كلمنا على <a class="num" href="tel:${esc(S().phone)}">${esc(S().phone)}</a></div>`
+        ${cancelled ? `<div class="err" style="margin-top:16px">الطلب ده اتلغى. لو في مشكلة كلمنا على <a class="num" href="tel:${esc(TEL())}">${esc(TEL())}</a></div>`
           : `<div class="steps" style="--n:${flow.length}">${flow.map((st, i) => `<div class="s ${i < idx || o.status === "done" ? "done" : i === idx ? "cur done" : ""}"><i>${FLOW_LBL[st][1]}</i>${FLOW_LBL[st][0]}</div>`).join("")}</div>`}
         </div>
         <div class="box">${o.items.map(i => `<div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0"><span>${i.qty}× ${esc(i.name)}${i.options.length ? `<small style="color:var(--muted)"> (${esc(i.options.map(x => x.choice).join("، "))})</small>` : ""}</span><span class="num">${money(i.line)}</span></div>`).join("")}
@@ -544,7 +566,7 @@
     openSheet(head("متابعة الطلب") + `<div class="sh-body" id="trackBody"></div><div class="sh-foot" style="display:flex;gap:8px">
       <a class="btn green" id="waBtn" target="_blank" rel="noopener">${ICON.wa}ابعته واتساب</a><button type="button" class="btn alt" data-close>تمام</button></div>`, () => {
       draw(o);
-      $("#waBtn").href = `https://wa.me/${S().whatsapp}?text=${encodeURIComponent(waText(o))}`;
+      $("#waBtn").href = `https://wa.me/${WA()}?text=${encodeURIComponent(waText(o))}`;
       const tick = async () => {
         try { const n = await api.rpc("track_order", { track: o.track }); if (n) { const changed = n.status !== o.status; o = n; draw(o); if (changed && o.status === "done" && me) refreshMe(); } } catch (e) { }
         if (!["done", "cancelled"].includes(o.status)) timer = setTimeout(tick, 8000);
@@ -580,7 +602,7 @@
         const f = $("#forgot"); if (f) f.onclick = () => {
           const ph = $("#aPhone").value.trim();
           const msg = encodeURIComponent(`السلام عليكم، نسيت باسورد حسابي على موقع ديفان كوفي${ph ? " — رقمي: " + ph : ""}`);
-          $("#aErr").innerHTML = `<div class="box" style="margin:0 0 10px">ابعتلنا واتساب وهنغيّرلك الباسورد في دقيقة: <a href="https://wa.me/${esc(S().whatsapp)}?text=${msg}" target="_blank" rel="noopener" style="color:var(--red);font-weight:700">ابعت دلوقتي</a><br><small style="color:var(--muted)">بعد ما تدخل تقدر تغيّره بنفسك من حسابك.</small></div>`;
+          $("#aErr").innerHTML = `<div class="box" style="margin:0 0 10px">ابعتلنا واتساب وهنغيّرلك الباسورد في دقيقة: <a href="https://wa.me/${WA()}?text=${msg}" target="_blank" rel="noopener" style="color:var(--red);font-weight:700">ابعت دلوقتي</a><br><small style="color:var(--muted)">بعد ما تدخل تقدر تغيّره بنفسك من حسابك.</small></div>`;
         };
         $("#aForm").onsubmit = async e => {
           e.preventDefault();
@@ -625,7 +647,7 @@
       try {
         const list = await api.rpc("my_orders", { token });
         if (!$("#accBody")) return;
-        box.innerHTML = list.length ? list.map(o => `<div class="ord"><div class="h"><b class="num">#${o.id}</b><span class="pill ${o.status}">${DV.STATUS[o.status]}</span></div>
+        box.innerHTML = list.length ? list.map(o => `<div class="ord"><div class="h"><b class="num">#${o.id}</b><span class="pill ${esc(o.status)}">${DV.STATUS[o.status]}</span></div>
           <small>${new Date(o.created_at).toLocaleDateString("ar-EG", { day: "numeric", month: "short" })} · ${DV.TYPES[o.type]} · <span class="num">${money(o.total)}</span>${o.points_earned && o.status !== "cancelled" ? ` · ${o.status === "done" ? "+" : "⏳ "}${o.points_earned} حبّة` : ""}</small>
           <div style="font-size:13.5px;margin-top:4px">${o.items.map(i => `${i.qty}× ${esc(i.name)}`).join("، ")}</div>
           <div class="acts"><button type="button" data-re="${o.id}">${ICON.repeat}اطلبه تاني</button>${!["done", "cancelled"].includes(o.status) ? `<button type="button" data-tr="${o.id}">${ICON.clock}تابع</button>` : ""}</div></div>`).join("")
@@ -669,31 +691,49 @@
   $("#acctBtn").onclick = () => openAccount();
   $("#beanBtn").onclick = () => openAccount();
   $("#loyBtn").onclick = () => openAccount(me ? "orders" : "register");
-  if (!api.live) $("#demoBar").hidden = false;
-  renderVisit();
+  if (api.demo) $("#demoBar").hidden = false;
+  renderHeader(); renderVisit();
 
-  async function boot(attempt = 0) {
-    try {
-      CAT = await api.rpc("get_catalog");
-      cart = cart.filter(c => byId(c.pid)); saveCart();
-      renderAll();
-      refreshMe();
-      // لو في طلب لسه شغال، نوري زرار متابعة
-      const tracks = store.get("dv_tracks", []).filter(t => Date.now() - t.at < 6 * 3600e3);
-      if (tracks.length) {
-        const o = await api.rpc("track_order", { track: tracks[0].track }).catch(() => null);
-        if (o && !["done", "cancelled"].includes(o.status)) {
-          const b = document.createElement("button"); b.type = "button"; b.className = "tbtn"; b.setAttribute("aria-label", "متابعة الطلب");
-          b.innerHTML = ICON.clock; b.onclick = () => openTrack(o);
-          $("#cartBtn").before(b);
-        }
+  /* ---------- تحميل المنيو ---------- */
+  let booting = false;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const SKEL = `<div class="skel"></div>`.repeat(4);
+  function loadNote(msg) { $("#menuRoot").innerHTML = SKEL + `<p class="loadnote" role="status">${esc(msg)}</p>`; }
+  function loadError(e) {
+    const tel = TEL(), wa = WA();
+    $("#menuRoot").innerHTML = `<div class="empty loaderr" role="alert">${ART.cup}<p><b>المنيو ما اتحمّلش</b><br>${esc(e.message)}</p>
+      <button type="button" class="btn" id="retryBtn">جرّب تاني</button>
+      ${tel || wa ? `<p class="alt">أو اطلب على طول: ${tel ? `<a href="tel:${esc(tel)}" class="num">${esc(tel)}</a>` : ""}${tel && wa ? " · " : ""}${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">واتساب</a>` : ""}</p>` : ""}</div>`;
+    $("#retryBtn").onclick = () => { $("#menuRoot").innerHTML = SKEL; boot(); };
+  }
+  async function boot() {
+    if (booting || loaded) return;
+    booting = true;
+    for (let attempt = 1; ; attempt++) {
+      try { CAT = await api.rpc("get_catalog"); break; }
+      catch (e) {
+        // نحاول تلات مرات (النت بيقطع على الموبايل)، وبعدها رسالة واضحة وزرار
+        if (attempt >= 3 || e.kind === "setup" || e.kind === "offline") { booting = false; loadError(e); return; }
+        loadNote("بنحاول نوصل للسيرفر…");
+        await sleep(1500 * attempt);
       }
-    } catch (e) {
-      // النت بيقطع على الموبايل — نحاول تاني لوحدنا قبل ما نطلب من العميل
-      if (attempt < 4) { setTimeout(() => boot(attempt + 1), 1500 * (attempt + 1)); return; }
-      $("#menuRoot").innerHTML = `<div class="empty">${ART.cup}<p>${esc(e.message)}</p><button class="btn" style="max-width:220px;margin:auto" onclick="location.reload()">جرّب تاني</button></div>`;
+    }
+    booting = false; loaded = true;
+    cart = cart.filter(c => byId(c.pid)); saveCart();
+    renderAll();
+    refreshMe();
+    // لو في طلب لسه شغال، نوري زرار متابعة
+    const tracks = store.get("dv_tracks", []).filter(t => Date.now() - t.at < 6 * 3600e3);
+    if (tracks.length) {
+      const o = await api.rpc("track_order", { track: tracks[0].track }).catch(() => null);
+      if (o && !["done", "cancelled"].includes(o.status)) {
+        const b = document.createElement("button"); b.type = "button"; b.className = "tbtn"; b.setAttribute("aria-label", "متابعة الطلب");
+        b.innerHTML = ICON.clock; b.onclick = () => openTrack(o);
+        $("#cartBtn").before(b);
+      }
     }
   }
+  window.addEventListener("online", () => { if (!loaded && !booting) { $("#menuRoot").innerHTML = SKEL; boot(); } });
   boot();
-  setInterval(async () => { try { const c = await api.rpc("get_catalog"); const was = JSON.stringify(CAT); if (JSON.stringify(c) !== was) { CAT = c; renderAll(); } } catch (e) { } }, 90000);
+  setInterval(async () => { if (!loaded) return boot(); try { const c = await api.rpc("get_catalog"); const was = JSON.stringify(CAT); if (JSON.stringify(c) !== was) { CAT = c; renderAll(); } } catch (e) { } }, 90000);
 })();

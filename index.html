@@ -6,16 +6,59 @@
 <title>ديفان كوفي | قهوتك على كيفك — اطلب أونلاين</title>
 <meta name="description" content="ديفان كوفي في X Mall — البنفسج 10، التجمع الخامس. اطلب قهوتك ومشروباتك أونلاين توصيل أو استلام، واكسب حبّات على كل طلب.">
 <meta name="theme-color" content="#961a12">
+<link rel="canonical" href="%SITE_URL%/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ديفان كوفي">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="%SITE_URL%/">
 <meta property="og:title" content="ديفان كوفي — قهوتك على كيفك">
 <meta property="og:description" content="اطلب أونلاين من ديفان كوفي، التجمع الخامس. 10% حبّات على كل طلب.">
-<meta property="og:image" content="assets/icon-512.png">
-<link rel="icon" href="assets/icon-192.png">
+<meta property="og:image" content="%SITE_URL%/assets/share-1200x630.jpg?v=5">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ديفان كوفي — قهوتك على كيفك، اطلب أونلاين">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ديفان كوفي — قهوتك على كيفك">
+<meta name="twitter:description" content="اطلب أونلاين من ديفان كوفي، التجمع الخامس. 10% حبّات على كل طلب.">
+<meta name="twitter:image" content="%SITE_URL%/assets/share-1200x630.jpg?v=5">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "ديفان كوفي",
+  "alternateName": "Divan Coffee",
+  "slogan": "قهوتك على كيفك",
+  "url": "%SITE_URL%/",
+  "image": "%SITE_URL%/assets/share-1200x630.jpg",
+  "logo": "%SITE_URL%/assets/icon-512.png",
+  "telephone": "+201000160277",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "شارع د. أحمد عكاشة، X Mall، البنفسج 10",
+    "addressLocality": "التجمع الخامس",
+    "addressRegion": "القاهرة",
+    "addressCountry": "EG"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 30.043304, "longitude": 31.4685865 },
+  "hasMap": "https://maps.app.goo.gl/zNxkRxfwVWQ1HZ4N6",
+  "servesCuisine": ["Coffee", "Drinks", "Bakery"],
+  "priceRange": "EGP 20–1200",
+  "currenciesAccepted": "EGP",
+  "sameAs": [
+    "https://www.facebook.com/divancoffee.eg",
+    "https://www.instagram.com/divancoffee.eg",
+    "https://www.tiktok.com/@divancoffee.eg"
+  ],
+  "potentialAction": { "@type": "OrderAction", "target": "%SITE_URL%/#menu" }
+}
+</script>
+<link rel="icon" href="assets/icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="fonts/readex-pro-arabic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/reem-kufi-arabic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/fonts.css?v=4">
-<link rel="stylesheet" href="css/app.css?v=4">
+<link rel="stylesheet" href="css/fonts.css?v=5">
+<link rel="stylesheet" href="css/app.css?v=5">
 </head>
 <body>
 <div class="demo" id="demoBar" hidden>نسخة عرض — الطلبات بتتحفظ على الجهاز ده بس</div>
@@ -24,7 +67,7 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#" aria-label="ديفان كوفي — الصفحة الرئيسية"><img src="assets/logo-cream.webp" alt="ديفان كوفي" width="52" height="44"></a>
-    <span class="status" id="openStatus">بنستقبل طلبات</span>
+    <span class="status" id="openStatus" hidden></span>
     <button class="tbtn beanpill" id="beanBtn" type="button" aria-label="حبّاتي"></button>
     <button class="tbtn" id="acctBtn" type="button" aria-label="حسابي"></button>
     <button class="tbtn" id="cartBtn" type="button" aria-label="السلة"><span class="badge num" id="cartCount" hidden>0</span></button>
@@ -40,13 +83,13 @@
       <div id="sprig"></div>
       <h1 class="tag">قهوتك على كيفك</h1>
       <p class="sub">بنختار أجود أنواع البن ونحمّصه باحتراف — اطلب مشروبك وهيوصلك سخن، أو تعالى استلمه جاهز.</p>
-      <div class="modes" id="modes" role="group" aria-label="طريقة الطلب"></div>
+      <div class="modes" id="modes" role="group" aria-label="طريقة الطلب" hidden></div>
       <div class="ctas"><a class="cta" href="#menu">شوف المنيو واطلب</a><a class="ghost" href="#visit" id="heroMap"></a></div>
     </div>
   </div>
 </section>
 
-<div class="wrap loyal">
+<div class="wrap loyal" hidden>
   <div class="card">
     <div class="beans3" id="beans3"></div>
     <div><b id="loyTitle">10% حبّات على كل طلب</b><small id="loySub">الحبّة بجنيه، تخصمها من طلبك الجاي</small></div>
@@ -107,12 +150,12 @@
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle" hidden></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="vendor/supabase.min.js?v=4"></script>
-<script src="js/config.js?v=4"></script>
-<script src="js/seed.js?v=4"></script>
-<script src="js/engine.js?v=4"></script>
-<script src="js/art.js?v=4"></script>
-<script src="js/api.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="vendor/supabase.min.js?v=5"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/seed.js?v=5"></script>
+<script src="js/engine.js?v=5"></script>
+<script src="js/art.js?v=5"></script>
+<script src="js/api.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

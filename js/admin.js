@@ -93,13 +93,13 @@
     return [];
   }
   function ocard(o, fresh) {
-    const typ = o.type === "table" ? `<span class="pill table">ترابيزة ${o.table_no}</span>` : `<span class="pill ${o.type}">${DV.TYPES[o.type]}</span>`;
+    const typ = o.type === "table" ? `<span class="pill table">ترابيزة ${Number(o.table_no)}</span>` : `<span class="pill ${esc(o.type)}">${esc(DV.TYPES[o.type])}</span>`;
     const wa = "2" + o.phone;
-    return `<article class="ocard ${o.status === "new" ? "new" : ""} ${fresh ? "fresh" : ""}" data-id="${o.id}">
-      <div class="oh"><span class="no num">#${o.id}</span>${typ}<span class="pill ${o.status}">${DV.STATUS[o.status]}</span><span class="ago" title="${esc(new Date(o.created_at).toLocaleString("ar-EG"))}">${clock(o.created_at)} · ${ago(o.created_at)}</span></div>
+    return `<article class="ocard ${o.status === "new" ? "new" : ""} ${fresh ? "fresh" : ""}" data-id="${Number(o.id)}">
+      <div class="oh"><span class="no num">#${o.id}</span>${typ}<span class="pill ${esc(o.status)}">${esc(DV.STATUS[o.status])}</span><span class="ago" title="${esc(new Date(o.created_at).toLocaleString("ar-EG"))}">${clock(o.created_at)} · ${ago(o.created_at)}</span></div>
       <div class="who"><b>${esc(o.name)}</b> · <a class="num ltr" href="tel:${esc(o.phone)}">${esc(o.phone)}</a> · <a href="https://wa.me/${esc(wa)}" target="_blank" rel="noopener">واتساب</a>
         ${o.customer_points != null ? `<small style="color:var(--gold-ink);font-weight:600"> · عضو (${o.customer_points} حبّة)</small>` : ""}
-        ${o.address ? `<div class="addr">${esc(o.address)}${o.lat != null ? `<br><a href="https://maps.google.com/?q=${o.lat},${o.lng}" target="_blank" rel="noopener">📍 افتح الموقع على الخريطة</a> <small style="color:var(--muted)">(<span class="num">${o.distance_km}</span> كم من الكافيه)</small>` : ""}</div>` : ""}</div>
+        ${o.address ? `<div class="addr">${esc(o.address)}${o.lat != null ? `<br><a href="https://maps.google.com/?q=${Number(o.lat)},${Number(o.lng)}" target="_blank" rel="noopener">📍 افتح الموقع على الخريطة</a> <small style="color:var(--muted)">(<span class="num">${Number(o.distance_km)}</span> كم من الكافيه)</small>` : ""}</div>` : ""}</div>
       <div class="its">${o.items.map(i => `<div class="it"><span class="q num">${i.qty}×</span><span class="n">${esc(i.name)}${i.options.length ? `<small>${esc(i.options.map(x => x.choice).join(" · "))}</small>` : ""}${i.note ? `<em>📝 ${esc(i.note)}</em>` : ""}</span><span class="num">${money(i.line)}</span></div>`).join("")}</div>
       ${o.notes ? `<div class="note">ملاحظة: ${esc(o.notes)}</div>` : ""}
       <div class="tot">
@@ -215,7 +215,7 @@
           catch (e) { $("#cErr").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
         };
         if (c) $("#cDel").onclick = async () => {
-          if (!await confirmBox(`تمسح قسم "${c.name}"؟`, "امسح")) return;
+          if (!await confirmBox(`تمسح قسم "${esc(c.name)}"؟`, "امسح")) return;
           try { await api.rpc("admin_delete_category", { id: c.id }); CATALOG = await api.rpc("admin_catalog"); paintMenu(); toast("اتمسح"); } catch (e) { toast(e.message, 4000); }
         };
       });
@@ -287,7 +287,7 @@
           catch (e) { $("#pErr").innerHTML = `<div class="err">${esc(e.message)}</div>`; $("#pSave").disabled = false; }
         };
         if (p) $("#pDel").onclick = async () => {
-          if (!await confirmBox(`تمسح "${p.name}" نهائي؟ لو عايز تخفيه بس، اقفل "ظاهر في المنيو".`, "امسح")) return;
+          if (!await confirmBox(`تمسح "${esc(p.name)}" نهائي؟ لو عايز تخفيه بس، اقفل "ظاهر في المنيو".`, "امسح")) return;
           try { await api.rpc("admin_delete_product", { id: p.id }); CATALOG = await api.rpc("admin_catalog"); paintMenu(); toast("اتمسح"); } catch (e) { toast(e.message); }
         };
       });
@@ -327,7 +327,7 @@
             closeModal(); vCoupons(); toast("اتحفظ");
           } catch (err) { $("#kErr").innerHTML = `<div class="err">${esc(err.message)}</div>`; }
         };
-        if (c) $("#kDel").onclick = async () => { if (!await confirmBox(`تمسح كود ${c.code}؟`, "امسح")) return; try { await api.rpc("admin_delete_coupon", { code: c.code }); vCoupons(); toast("اتمسح"); } catch (e) { toast(e.message); } };
+        if (c) $("#kDel").onclick = async () => { if (!await confirmBox(`تمسح كود ${esc(c.code)}؟`, "امسح")) return; try { await api.rpc("admin_delete_coupon", { code: c.code }); vCoupons(); toast("اتمسح"); } catch (e) { toast(e.message); } };
       });
   }
 
@@ -466,6 +466,6 @@
     $("#lBtn").disabled = false;
   };
   $("#logoutBtn").onclick = async () => { await api.admin.logout(); location.reload(); };
-  if (!api.live) $("#demoBar").hidden = false;
+  if (api.demo) $("#demoBar").hidden = false;
   (async () => { if (await api.admin.session()) start(); else $("#loginView").hidden = false; })();
 })();

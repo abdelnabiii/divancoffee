@@ -47,3 +47,35 @@ Severity: **Critical** = site can't take orders / data at risk · **High** = wro
 | F18 | Unverified business values: `hours` empty, WhatsApp/phone, coordinates, 50 km radius, fee 30, min 0, 15 tables, cashback 10 % cap 100, prices. | Seed data. | Content | Phase 3 confirmations. |
 
 Not bugs (checked and OK): pricing math (`lineUnit`, kg factors, option prices), coupon min-order and %, points earn/award/refund in demo, required-option validation, RTL layout, local fonts loading, Leaflet loading lazily from `vendor/`, the sticky cart bar, bottom sheets with the back button, the QR codes (they encode `<site>/?t=N`; the app reads `?t=`, not `?table=`, and both match), print layout trigger, admin views at 360/768 px (no overflow), and `esc()` on every customer-entered field (name, phone, address, notes, item notes).
+
+## Fix status (Phase 2, cache version `?v=5`)
+
+Verified by `tests/site.e2e.js` (52 browser checks, run on Apache 2.4 with the real `.htaccess`, CSP active) and `tests/rpc.test.js` (131 backend checks). Evidence: `audit/phase2/`.
+
+| # | Status | What changed |
+|---|---|---|
+| F1 | ⏳ waiting on you | New Supabase project, then `config.js`. |
+| F2 | ✅ (local) | `supabase/schema.sql` (Phase 1). Goes live when you run it. |
+| F3 | ✅ | `api.js`: demo mode only when `supabaseUrl` is empty. Missing library → clear error; the demo admin password is refused with a production config. |
+| F4 | ✅ | Separate Arabic messages for offline / server not answering / setup / server error; technical detail goes to the console. |
+| F5 | ✅ | 3 tries with "بنحاول نوصل للسيرفر…", then a clear error after ~5 s (was ~15 s), with a retry button that reloads the menu in place and phone/WhatsApp links. Auto-retries when the device comes back online. |
+| F6 | ✅ | Header icons render immediately. The mode bar and loyalty card stay hidden until settings load. Phone/WhatsApp fall back to `config.js`. |
+| F7 | ✅ | "مش على ترابيزة؟" button in the table banner. Table mode now expires after 90 min (was 3 h). |
+| F8 | ✅ | Password hint removed from `admin.html` and the error message. |
+| F9 | ✅ | `.items` uses `minmax(0,1fr)`. No overflow at 360/390/768/1280. |
+| F10 | 🟡 needs the domain | Twitter card, OG type/locale/size, 1200×630 `assets/share-1200x630.jpg`, `CafeOrCoffeeShop` JSON-LD, `sitemap.xml`, sitemap line in `robots.txt`. Absolute URLs use `%SITE_URL%` until `node tools/set-domain.js https://…` fills them in. |
+| F11 | ✅ | CSP, HSTS (HTTPS only), Permissions-Policy, COOP. HTTPS redirect guarded by `X-Forwarded-Proto`. Dev folders/notes return 403 if uploaded by mistake. Tested on real Apache. |
+| F12 | ✅ | Separate `any` and `maskable` icons (`assets/icon-maskable-*.png`, logo inside the safe zone). |
+| F13 | ✅ | `esc()` in admin confirm dialogs; order-card fields escaped / coerced to numbers. XSS probe: a product named `<img src=x onerror=…>` stays text. |
+| F14 | ✅ | Tiles from `tile.openstreetmap.org`. Cafe label sits under the point. |
+| F15 | ✅ | While a sheet is open the toast moves to the very top, off the sheet title. |
+| F16 | — | Unchanged (spec behaviour). Decide later. |
+| F17–F18 | ⏳ Phase 3 | Photos and value confirmations. |
+
+New bugs found while fixing, also fixed:
+
+| # | Symptom | Cause | Severity | Fix |
+|---|---|---|---|---|
+| F19 | An invalid coupon (e.g. under its minimum) can't be removed: clearing the field says "اكتب الكود" and checkout stays blocked with "كود الخصم مش شغال". | The apply handler returned early on an empty field without clearing the stored coupon. | High | Empty field + "تطبيق" now removes the coupon ("اتشال الكود"). |
+| F20 | Map picker pin tip sits ~27 px below the point that gets saved (≈60 m at street zoom). | Pin centred on the whole picker screen, not on the map area under the header. | Medium | Pin positioned on the map's centre and kept there with a `ResizeObserver`. |
+| F21 | Every empty state (empty cart, no orders, menu error) shows a giant full-width cup. | Illustration inserted without the `.ill` wrapper the CSS sizes. | Low | CSS sizes `.empty > svg` too. |

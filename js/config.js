@@ -12,6 +12,9 @@ window.DV_CONFIG = {
   tagline: "قهوتك على كيفك",
   address: "شارع د. أحمد عكاشة — X Mall — البنفسج 10 — التجمع الخامس",
   mapUrl: "https://maps.app.goo.gl/zNxkRxfwVWQ1HZ4N6",
+  // بيظهروا لحد ما الإعدادات تيجي من السيرفر (أو لو السيرفر وقع) — الأرقام اللي في لوحة التحكم بتغلب
+  phone: "01000160277",
+  whatsapp: "201000160277",
   social: {
     facebook: "https://www.facebook.com/divancoffee.eg",
     instagram: "https://www.instagram.com/divancoffee.eg",
