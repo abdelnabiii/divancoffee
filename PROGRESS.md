@@ -21,6 +21,9 @@
 - Phase 3 started: `MISSING.md` (58 photos popular-first, assets, values to confirm). Photo pipeline `tools/add-photo.py` (WebP ≤900 px q85 → `assets/menu/<id>.webp`, updates `seed.js`, `schema.sql` seed and `supabase/photos.sql`) + `tools/photo-shot.js` (before/after). Dry-run verified, then reverted.
 - Site address: you said continue → left as `%SITE_URL%` placeholder (fill with `node tools/set-domain.js https://…`).
 
+- Phase 4: `tools/build-zip.py` (release checks + zip outside the site folder; same layout as the original + 3 new images). The extracted zip passes on Apache: 52/52 browser, 131/131 backend. `README.md`, `DEPLOY.md` (cPanel checklist, SSL, smoke test, rollback), `CHANGELOG.md`, `supabase/add-admin.sql`, `supabase/optional-demo-coupon.sql`. Cache version `?v=5`.
+- Current zip = release candidate: rebuild after the Supabase key + domain are in (build warns until then).
+
 ## Blocked
 - This environment can't reach `*.supabase.co` and has no Supabase MCP → you run the SQL and the test script; I hand you exact steps.
 
