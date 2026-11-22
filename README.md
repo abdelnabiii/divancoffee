@@ -5,7 +5,7 @@ Plain HTML/CSS/JS with **no build step**, hosted on cPanel. Backend: **Supabase*
 
 | Page | Files |
 |---|---|
-| Customer site | `index.html`, `js/app.js`, `css/app.css` |
+| Customer site | `index.html`, `js/app.js`, `css/app.css` (menu, cart, checkout) + `js/stage.js`, `js/bag.js`, `css/stage.css` (v6 3D design) |
 | Admin dashboard | `admin.html`, `js/admin.js`, `css/admin.css` |
 | Shared | `js/config.js` (settings), `js/api.js` (backend calls), `js/engine.js` (price rules + demo backend), `js/seed.js` (starting menu), `js/art.js` (icons) |
 | Backend | `supabase/schema.sql` (everything, one paste) |
@@ -81,7 +81,7 @@ This converts to WebP (≤900 px, quality 85) → `assets/menu/p002.webp`, recor
 ## 5. Updating the site
 
 1. Make the change.
-2. **Bump the cache number** in `index.html` and `admin.html` (all `?v=5` → `?v=6`) and the two `?v=` in `js/app.js` (Leaflet). Visitors' browsers keep CSS/JS for a week, and the new number makes them fetch the new files.
+2. **Bump the cache number** in `index.html` and `admin.html` (e.g. all `?v=6` → `?v=7`, including the imports at the top of `js/stage.js` and in `vendor/three/RoomEnvironment.js`) and the two `?v=` in `js/app.js` (Leaflet). Visitors' browsers keep CSS/JS for a week, and the new number makes them fetch the new files.
 3. Preview locally: `node tools/preview.js` → http://localhost:8080 (demo mode), or `node tools/preview.js --live` (uses the Supabase project in `config.js`).
 4. Run the checks (developer machine with Playwright): `node tests/site.e2e.js http://localhost:8088/ audit/latest` against an Apache copy, and `tests/rpc.test.js` if the database changed.
 5. Build the upload: `python3 -I tools/build-zip.py` → `../divan-upload-to-cpanel.zip` (next to the site folder). The build stops if a referenced file is missing, `?v=` numbers differ, JS doesn't parse, or a secret key / demo password is found.
@@ -97,7 +97,15 @@ node tools/set-domain.js https://www.your-domain.com
 ```
 This fills the canonical link, `og:url`, `og:image`, Twitter image, JSON-LD and `sitemap.xml`/`robots.txt`. Until then the build leaves those tags out instead of shipping a broken address. The share image is `assets/share-1200x630.jpg` (template: `tools/share-image.html`, render with `node tools/make-share-image.js`).
 
-## 7. Development tools
+## 7. The v6 design (3D coffee bag)
+
+- `js/stage.js` (ES module) only *displays*: it reads the catalogue from `js/app.js` (`DV.app`, events `dv:catalog`, `dv:cart`, `dv:added`) and calls back into it (open product sheet, add to cart). Ordering logic stays in `app.js`.
+- The 7 bags in the hero are the products listed in `BAGS` in `js/bag.js` (ID, bag colour, background colour, storm ingredient). Names, prices and options always come from the menu, so dashboard edits show on the bags. To feature another product, add its ID there (bump `?v=`).
+- Three.js 0.160.0 is self-hosted in `vendor/three/` and loads only after the menu data. Without WebGL the bags are flat images; if the module or the menu fails, the page shows the v5 layout.
+- Optional intro video: put it in `assets/` and set `introVideo` in `js/config.js`. It plays at most once per 24 h, never on table-QR visits or with reduced motion.
+- Checks: `node tests/stage.e2e.js http://localhost:8088/ audit/latest` (71 browser checks).
+
+## 8. Development tools
 
 | Tool | What |
 |---|---|
@@ -108,6 +116,7 @@ This fills the canonical link, `og:url`, `og:image`, Twitter image, JSON-LD and 
 | `tools/gen-seed.js` | Regenerates the seed block of `schema.sql` from `js/seed.js` |
 | `tests/rpc.test.js` | 131 backend checks, incl. security (anon can't read tables or call admin functions, tampered prices ignored, delivery radius, coupons, points) |
 | `tests/site.e2e.js` | 52 browser checks (layout at 360–1280 px, flows, CSP, error states) |
+| `tests/stage.e2e.js` | 71 browser checks for the v6 design |
 | `tests/local/` | A local Supabase stand-in (Postgres 16 + PostgREST) for running the tests without a real project |
 
 `AUDIT.md` has the original findings and what was fixed; `CHANGELOG.md` the release notes; `DEPLOY.md` the cPanel checklist.

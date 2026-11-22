@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ديفان كوفي | قهوتك على كيفك — اطلب أونلاين</title>
-<meta name="description" content="ديفان كوفي في X Mall — البنفسج 10، التجمع الخامس. اطلب قهوتك ومشروباتك أونلاين توصيل أو استلام، واكسب حبّات على كل طلب.">
+<title>ديفان كوفي | بن طازة بيتحمّص عندنا — اطلب أونلاين</title>
+<meta name="description" content="ديفان كوفي في X Mall — البنفسج 10، التجمع الخامس. اطلب البن بتاعك أونلاين — توليفات بتتحمّص وتتطحن على كيفك، توصيل أو استلام، واكسب حبّات على كل طلب.">
 <meta name="theme-color" content="#961a12">
 <link rel="canonical" href="%SITE_URL%/">
 <meta property="og:type" content="website">
@@ -74,7 +74,7 @@
 <header class="top" id="hdr">
   <div class="wrap">
     <a class="brand" href="#hero" aria-label="ديفان كوفي — الصفحة الرئيسية"><img src="assets/logo-cream.webp" alt="ديفان كوفي" width="52" height="44"><span class="status" id="openStatus" hidden></span></a>
-    <nav class="pill" id="navPill" aria-label="أقسام الصفحة"><i class="hl" aria-hidden="true"></i><a href="#hero" data-s="hero">المشروبات</a><a href="#inside" data-s="inside">حكايتنا</a><a href="#menu" data-s="menu">المنيو</a><a href="#beans" data-s="beans">البن</a></nav>
+    <nav class="pill" id="navPill" aria-label="أقسام الصفحة"><i class="hl" aria-hidden="true"></i><a href="#hero" data-s="hero">البن</a><a href="#inside" data-s="inside">حكايتنا</a><a href="#menu" data-s="menu">المنيو</a><a href="#beans" data-s="beans">اعمل كيسك</a></nav>
     <div class="modes" id="modes" role="group" aria-label="طريقة الطلب" hidden></div>
     <button class="tbtn beanpill" id="beanBtn" type="button" aria-label="حبّاتي"></button>
     <button class="tbtn" id="acctBtn" type="button" aria-label="حسابي"></button>
@@ -82,7 +82,7 @@
   </div>
 </header>
 
-<section id="hero" class="h3" aria-roledescription="carousel" aria-label="المشروبات المميزة">
+<section id="hero" class="h3" aria-roledescription="carousel" aria-label="توليفات البن">
   <div class="reveal" id="reveal" aria-hidden="true"></div>
   <div class="rings" aria-hidden="true"></div>
   <div class="bits" id="bits" aria-hidden="true"></div>
@@ -91,7 +91,7 @@
   <div class="count num" id="count" aria-hidden="true">02</div>
   <h1 class="disp" id="title" aria-live="polite"></h1>
   <div class="hcta" id="hcta"><span class="hprice num" id="hprice"></span><button type="button" class="hbuy" id="hbuy">اطلبه دلوقتي</button></div>
-  <button type="button" class="next" id="next" aria-label="المشروب اللي بعده"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+  <button type="button" class="next" id="next" aria-label="الكيس اللي بعده"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
   <button type="button" class="auto" id="auto" aria-pressed="true"><span class="ring" aria-hidden="true"></span><span>تشغيل تلقائي</span></button>
   <div class="hero grain hero-static" id="heroStatic">
   <div class="beanbg"></div>
@@ -101,7 +101,7 @@
       <img class="logo" src="assets/logo-cream.webp" alt="ديفان كوفي" width="330" height="283">
       <div id="sprig"></div>
       <h1 class="tag">قهوتك على كيفك</h1>
-      <p class="sub">بنختار أجود أنواع البن ونحمّصه باحتراف — اطلب مشروبك وهيوصلك سخن، أو تعالى استلمه جاهز.</p>
+      <p class="sub">بنختار أجود أنواع البن ونحمّصه باحتراف — اطلب البن بتاعك وهيوصلك طازة، أو تعالى استلمه جاهز.</p>
       
       <div class="ctas"><a class="cta" href="#menu">شوف المنيو واطلب</a><a class="ghost" href="#visit" id="heroMap"></a></div>
     </div>
@@ -112,7 +112,7 @@
 <section id="inside" aria-label="من الحبة للفنجان">
   <div class="pin">
     <div class="in-dark" id="inDark"></div>
-    <div class="frame" id="inBack"><div class="in-num disp num" id="inNum" aria-hidden="true">01</div><div class="in-cup" id="inCup"></div></div>
+    <div class="frame" id="inBack"><div class="in-num disp num" id="inNum" aria-hidden="true">01</div><div class="in-bag" id="inBag"></div></div>
   </div>
 </section>
 <div id="inFront">
@@ -122,8 +122,8 @@
 
 <section id="menu" class="m3">
   <div class="sig" id="sig">
-    <h2 class="disp sig-h"><span><span>الأكثر</span></span><span><span>طلبًا</span></span></h2>
-    <p class="sig-cap">خمس مشروبات<br>الناس بتطلبها كل يوم.<br>اختار مشروبك.</p>
+    <h2 class="disp sig-h"><span><span>البن</span></span><span><span>بتاعنا</span></span></h2>
+    <p class="sig-cap">سبع توليفات بتتحمّص عندنا.<br>اختار البن اللي على كيفك،<br>والوزن والطحن زي ما تحب.</p>
     <div class="cards" id="cards"></div>
   </div>
   <div class="wrap loyal" hidden>
@@ -150,7 +150,7 @@
 </main>
 </section>
 
-<section id="beans" class="b3" aria-label="خد البن معاك">
+<section id="beans" class="b3" aria-label="اعمل كيسك">
   <div class="b-in">
     <h2 class="disp b-h"><span><span>خد البن</span></span><span><span>معاك <em>للبيت</em></span></span></h2>
     <div class="b-stage"><div class="b-glow" id="bGlow"></div><div class="b-bag" id="bBag"></div></div>

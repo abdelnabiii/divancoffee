@@ -1,5 +1,27 @@
 # Changelog
 
+## v6 — redesign: one travelling 3D coffee bag (2026-11)
+
+Cache version `?v=5` → `?v=6`. Spec: `prompts/divan-redesign-prompt.md` (see "As built" at the top).
+
+### Menu
+- **Drinks removed** (hot drinks, iced coffee, cocktails, juices — 46 items). The menu is now coffee beans (4 blends, 3 French coffees) and bakery (6), 13 items. Product IDs of the remaining items are unchanged (`p046`–`p058`); categories ordered blends → French coffee → bakery.
+
+### New page (Stride-style), on top of the unchanged ordering logic
+- **Hero:** the 7 bean products as real-time 3D stand-up pouches on an arc (Three.js 0.160.0, self-hosted). Drag/flick, tap a bag, ← / → keys (RTL), next button, autoplay every 3.2 s; feathered colour circle in the bag's colour; name animated word by word (Arabic stays joined); live price + "اطلبه دلوقتي" opening the real product sheet.
+- **"من الحبة للفنجان":** pinned section; the selected bag flies in, turns 180° per step (the back shows the bag's real options: price, weight, spice, roast, grind, flavour), then spins through a storm of ingredients.
+- **Signature cards:** the bag lands exactly on its own card (follows the card tilt, squashes on tap); the full menu continues below.
+- **"اعمل كيسك":** pick blend, weight, spice, roast, grind; live price from the same rule as the server; adds to the same cart.
+- Header with section pill (bottom bar on phones), fly-to-cart animation, smooth wheel scrolling, logo-stamp intro (once per 24 h, never on table visits).
+- Falls back to flat bag images without WebGL, and to the v5 layout if the module or the catalogue fails. Reduced motion respected throughout.
+
+### Fixed while building
+- The page-wide "open product" click handler also fired for any element with `data-pid` (now menu rows only).
+- Hero height now subtracts the demo / table banner, so the CTA is never pushed off short screens.
+
+### Tests
+- `tests/stage.e2e.js`: 71 checks (arc, RTL order, drag/tap/keys/autoplay, colour, title, CTA → sheet → cart, flips 0/180/360/720°, storm, bag lands on its card within 4 px, builder price = server total, intro rules, reduced motion, 6 screen sizes without overflow or overlap, no-WebGL fallback, no new hosts). v5 suites still pass: `site.e2e.js` 52, `rpc.test.js` 131.
+
 ## v5 — production fix-up (2026-11)
 
 Cache version `?v=4` → `?v=5`. Details and evidence: `AUDIT.md`.

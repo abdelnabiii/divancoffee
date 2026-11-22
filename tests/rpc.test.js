@@ -50,7 +50,7 @@ async function adminToken() {
   const S = cat.settings;
   const P = id => cat.products.find(p => p.id === id);
   const inside = { lat: Number(S.cafe_lat) + 0.01, lng: Number(S.cafe_lng) + 0.01 };
-  const base = (o = {}) => ({ type: "pickup", name: "اختبار " + rnd(3), phone: phone(), notes: "", items: [{ pid: "p009", qty: 1, sel: {} }], ...o });
+  const base = (o = {}) => ({ type: "pickup", name: "اختبار " + rnd(3), phone: phone(), notes: "", items: [{ pid: "p046", qty: 1, sel: {} }], ...o });
   const placed = [];
   const place = async (payload, token) => { const r = await call("place_order", { payload, token }); if (r.data) placed.push(r.data.id); return r; };
 
@@ -77,7 +77,7 @@ async function adminToken() {
 
   section("Anon cannot call any admin_* function");
   const adminCalls = { admin_orders: { status: "", lim: 5 }, admin_set_status: { id: 1, status: "done" }, admin_catalog: {},
-    admin_save_product: { p: { name: "x", price: 1, category: "hot" } }, admin_delete_product: { id: "p001" },
+    admin_save_product: { p: { name: "x", price: 1, category: "bakery" } }, admin_delete_product: { id: "p046" },
     admin_save_category: { c: { name: "x" } }, admin_delete_category: { id: "hot" }, admin_coupons: {},
     admin_save_coupon: { c: { code: "HACK1", type: "percent", value: 100 } }, admin_delete_coupon: { code: "DIVAN10" },
     admin_customers: { q: "" }, admin_adjust_points: { id: "x", delta: "100" }, admin_reset_password: { id: "x", password: "123456" },
@@ -97,9 +97,9 @@ async function adminToken() {
 
   section("place_order — validation and server-side pricing");
   {
-    const r = await place(base({ items: [{ pid: "p009", qty: 2, sel: { sugar: [0] }, unit: 0.01, price: 0.01, line: 0 }],
+    const r = await place(base({ items: [{ pid: "p046", qty: 2, sel: { sugar: [0] }, unit: 0.01, price: 0.01, line: 0 }],
       subtotal: 1, total: 1, discount: 999, delivery_fee: 0 }));
-    const exp = Number(P("p009").price) * 2;
+    const exp = Number(P("p046").price) * 2;
     ok(r.data && r.data.subtotal === exp && r.data.total === exp && r.data.discount === 0, `tampered prices ignored → total ${r.data && r.data.total} (expected ${exp})`, r);
     ok(r.data && !("phone" in r.data) && !("address" in r.data) && !("client_ip" in r.data), "public order hides phone/address/ip");
     ok(r.data && /^[0-9a-f]{24}$/.test(r.data.track), "tracking code is 96-bit random");
@@ -113,14 +113,14 @@ async function adminToken() {
     ok(r2.error === "لازم تختار التحويجة", "missing required option rejected", r2);
     const r3 = await place(base({ items: [{ pid: "p053", qty: 1, sel: { weight: [0, 1], spice: [0], roast: [0], grind: [0] } }] }));
     ok(r3.error === 'اختار حاجة واحدة بس في "الوزن"', "two choices in a single group rejected", r3);
-    const r4 = await place(base({ items: [{ pid: "p009", qty: 1, sel: { sugar: [99, -1, "x"] } }] }));
-    ok(r4.data && r4.data.total === Number(P("p009").price), "out-of-range choice indexes ignored", r4);
+    const r4 = await place(base({ items: [{ pid: "p046", qty: 1, sel: { sugar: [99, -1, "x"] } }] }));
+    ok(r4.data && r4.data.total === Number(P("p046").price), "out-of-range choice indexes ignored", r4);
     void p;
   }
   ok((await place(base({ items: [{ pid: "nope", qty: 1 }] }))).error === "في صنف في السلة مبقاش متاح، شيله وكمّل", "unknown product rejected");
-  ok((await place(base({ items: [{ pid: "p009", qty: 51 }] }))).error === "الكمية مش صح", "qty > 50 rejected");
-  ok((await place(base({ items: [{ pid: "p009", qty: 0 }] }))).error === "الكمية مش صح", "qty 0 rejected");
-  ok((await place(base({ items: Array.from({ length: 41 }, () => ({ pid: "p009", qty: 1 })) }))).error === "الطلب كبير أوي، كلمنا على التليفون", "41 lines rejected");
+  ok((await place(base({ items: [{ pid: "p046", qty: 51 }] }))).error === "الكمية مش صح", "qty > 50 rejected");
+  ok((await place(base({ items: [{ pid: "p046", qty: 0 }] }))).error === "الكمية مش صح", "qty 0 rejected");
+  ok((await place(base({ items: Array.from({ length: 41 }, () => ({ pid: "p046", qty: 1 })) }))).error === "الطلب كبير أوي، كلمنا على التليفون", "41 lines rejected");
   ok((await place(base({ notes: "x".repeat(40000) }))).error === "الطلب كبير أوي، كلمنا على التليفون", "40 KB payload rejected");
   ok((await place(base({ items: [] }))).error === "السلة فاضية", "empty cart rejected");
   ok((await place(base({ name: "a" }))).error === "اكتب اسمك", "short name rejected");
@@ -134,7 +134,7 @@ async function adminToken() {
   section("Delivery zone");
   {
     const r = await place(base({ type: "delivery", address: "عمارة 5 شارع 90 التجمع", ...inside }));
-    ok(r.data && r.data.delivery_fee === Number(S.delivery_fee) && r.data.total === Number(P("p009").price) + Number(S.delivery_fee), `inside radius accepted, fee ${S.delivery_fee}`, r);
+    ok(r.data && r.data.delivery_fee === Number(S.delivery_fee) && r.data.total === Number(P("p046").price) + Number(S.delivery_fee), `inside radius accepted, fee ${S.delivery_fee}`, r);
     const out = await place(base({ type: "delivery", address: "كورنيش إسكندرية عمارة 1", lat: 31.2001, lng: 29.9187 }));
     ok(out.error === `الزون ده مش متاح للتوصيل — بنوصّل لحد ${S.delivery_radius_km} كم من الكافيه`, "address outside the radius rejected", out);
     const nol = await place(base({ type: "delivery", address: "عمارة 5 شارع 90 التجمع", lat: "", lng: "" }));
@@ -201,8 +201,8 @@ async function adminToken() {
 
   section("Points: earn, use, refund");
   {
-    const o1 = await place(base({ items: [{ pid: "p009", qty: 1, sel: {} }] }), tok);   // لاتيه
-    const net = Number(P("p009").price);
+    const o1 = await place(base({ items: [{ pid: "p046", qty: 1, sel: {} }] }), tok);   // كرواسون سادة (65 ج)
+    const net = Number(P("p046").price);
     const earn = Math.min(Number(S.points_cap), Math.floor(Math.round(net * Number(S.cashback_rate) * 100) / 100 + 1e-9));
     ok(o1.data && o1.data.points_earned === earn, `logged-in order earns ${earn} points`, o1.data && o1.data.points_earned);
     ok((await rpcOk("me", { token: tok })).pending === earn, "points pending until done");
@@ -218,7 +218,7 @@ async function adminToken() {
       ok(await pts() === 0, "back to preparing → points reversed");
       await rpcOk("admin_set_status", { id: o1.data.id, status: "done" }, ADMIN);
       ok(await pts() === earn, "done again → awarded again");
-      const o2 = await place(base({ points: 9999, items: [{ pid: "p009", qty: 1 }] }), tok);
+      const o2 = await place(base({ points: 9999, items: [{ pid: "p046", qty: 1 }] }), tok);
       ok(o2.data && o2.data.points_used === earn && o2.data.total === r2(net - earn * Number(S.point_value)), `uses all ${earn} points, capped at balance`, o2.data);
       ok(await pts() === 0, "points deducted at order time");
       await rpcOk("admin_set_status", { id: o2.data.id, status: "cancelled" }, ADMIN);
@@ -278,9 +278,9 @@ async function adminToken() {
     await rpcOk("admin_delete_product", { id: p.id }, ADMIN);
     ok((await rpcOk("admin_delete_category", { id: cat2.id }, ADMIN)) === true, "delete product then category");
     // sold-out product cannot be ordered
-    const lat = cat.products.find(x => x.id === "p001");
+    const lat = cat.products.find(x => x.id === "p047");
     await rpcOk("admin_save_product", { p: { ...lat, available: false } }, ADMIN);
-    ok((await place(base({ items: [{ pid: "p001", qty: 1, sel: { sugar: [0] } }] }))).error === `"${lat.name}" خلص النهارده`, "sold-out product rejected");
+    ok((await place(base({ items: [{ pid: "p047", qty: 1, sel: {} }] }))).error === `"${lat.name}" خلص النهارده`, "sold-out product rejected");
     await rpcOk("admin_save_product", { p: { ...lat, available: true } }, ADMIN);
   }
 

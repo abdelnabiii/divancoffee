@@ -158,7 +158,7 @@
       ${priceTag(p)}</button>`;
   }
   document.addEventListener("click", e => {
-    const b = e.target.closest("[data-pid]"); if (!b || b.closest(".sheet")) return;
+    const b = e.target.closest(".row[data-pid], .pcard[data-pid]"); if (!b || b.closest(".sheet")) return;   // بس صفوف المنيو والكروت القديمة
     const p = byId(b.dataset.pid); if (!p) return;
     if (p.available === false) return toast("الصنف ده خلص النهارده");
     openProduct(p);
@@ -720,6 +720,7 @@
       <button type="button" class="btn" id="retryBtn">جرّب تاني</button>
       ${tel || wa ? `<p class="alt">أو اطلب على طول: ${tel ? `<a href="tel:${esc(tel)}" class="num">${esc(tel)}</a>` : ""}${tel && wa ? " · " : ""}${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">واتساب</a>` : ""}</p>` : ""}</div>`;
     $("#retryBtn").onclick = () => { $("#menuRoot").innerHTML = SKEL; boot(); };
+    emit("catalogerror", { message: e.message });
   }
   async function boot() {
     if (booting || loaded) return;

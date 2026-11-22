@@ -24,6 +24,10 @@
 - Phase 4: `tools/build-zip.py` (release checks + zip outside the site folder; same layout as the original + 3 new images). The extracted zip passes on Apache: 52/52 browser, 131/131 backend. `README.md`, `DEPLOY.md` (cPanel checklist, SSL, smoke test, rollback), `CHANGELOG.md`, `supabase/add-admin.sql`, `supabase/optional-demo-coupon.sql`. Cache version `?v=5`.
 - Current zip = release candidate: rebuild after the Supabase key + domain are in (build warns until then).
 
+- **v6 redesign built** (`?v=6`): travelling 3D coffee bag (Stride-style) — hero arc of the 7 bean products, pinned "من الحبة للفنجان" with flips + storm, landing on its card, "اعمل كيسك" builder, new header, intro, phone layout, no-WebGL fallback. `tests/stage.e2e.js` 71/71; `site.e2e.js` 52/52; `rpc.test.js` 131/131. Release zip 49 files / 966 KB.
+- **Drinks removed from the menu** (46 items): 13 items left (beans + bakery); IDs unchanged; tests moved to bakery items.
+- The claude.ai share link you sent could not be read from here (it only renders in a browser) — paste its text if it matters.
+
 ## Blocked
 - This environment can't reach `*.supabase.co` and has no Supabase MCP → you run the SQL and the test script; I hand you exact steps.
 

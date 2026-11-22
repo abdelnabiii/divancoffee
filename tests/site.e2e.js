@@ -58,8 +58,8 @@ const shot = (p, n, full) => p.screenshot({ path: `${OUT}/${n}.png`, fullPage: !
   await p.goto(BASE); await p.waitForSelector(".row");
   ok(await p.$eval("#demoBar", e => !e.hidden), "demo bar visible in demo mode");
   ok(await p.$eval("#acctBtn", e => !!e.querySelector("svg")) && await p.$eval("#cartBtn", e => !!e.querySelector("svg")), "header icons rendered");
-  await p.click('.row[data-pid="p002"]'); await sleep(300);
-  await p.click('.grp[data-g="sugar"] .chip[data-i="2"]'); await p.click("#qP"); await p.click("#addBtn"); await sleep(400);
+  await p.click('.row[data-pid="p047"]'); await sleep(300);
+  await p.click("#addBtn"); await sleep(400);
   const toastTop = await p.$eval("#toast", e => e.getBoundingClientRect().top);
   ok(toastTop < 80, `toast near the top after adding (${Math.round(toastTop)}px)`);
   await p.click("#cartBarBtn"); await sleep(300);
@@ -168,8 +168,8 @@ const shot = (p, n, full) => p.screenshot({ path: `${OUT}/${n}.png`, fullPage: !
     sec("Against a real backend (" + BURL + ")");
     const c5 = await ctx(browser, { mode: "backend", url: BURL, key: BKEY }); const pg = await c5.newPage(); const be = watch(pg);
     await pg.goto(BBASE); await pg.waitForSelector(".row", { timeout: 15000 });
-    ok(await pg.$$eval(".row", e => e.length) === 58, "58 products from the backend");
-    await pg.click('.row[data-pid="p009"]'); await sleep(300); await pg.click("#addBtn"); await sleep(300);
+    ok(await pg.$$eval(".row", e => e.length) === 13, "13 products from the backend");
+    await pg.click('.row[data-pid="p046"]'); await sleep(300); await pg.click("#addBtn"); await sleep(300);
     await pg.click("#cartBarBtn"); await sleep(400); await pg.click('#segType [data-m="pickup"]');
     await pg.fill("#iName", "اختبار متصفح"); await pg.fill("#iPhone", "0155" + String(Date.now()).slice(-7)); await pg.click("#placeBtn");
     await pg.waitForSelector("#trackBody .no", { timeout: 10000 });

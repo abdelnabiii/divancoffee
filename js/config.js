@@ -15,6 +15,8 @@ window.DV_CONFIG = {
   // بيظهروا لحد ما الإعدادات تيجي من السيرفر (أو لو السيرفر وقع) — الأرقام اللي في لوحة التحكم بتغلب
   phone: "01000160277",
   whatsapp: "201000160277",
+  // فيديو الافتتاحية (اختياري): مثلًا "assets/intro.mp4" — فاضي = لوجو بس، ومش بيظهر غير مرة كل 24 ساعة
+  introVideo: "",
   social: {
     facebook: "https://www.facebook.com/divancoffee.eg",
     instagram: "https://www.instagram.com/divancoffee.eg",

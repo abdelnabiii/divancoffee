@@ -1,5 +1,13 @@
 # Divan Coffee — ordering site redesign with one travelling 3D cup
 
+> **As built (v6) — differences from the spec below, decided during the build:**
+> - **Coffee bags, not cups.** The 3D object is a stand-up coffee pouch (Stride's pillow geometry with a crimped top seal), and the hero shows the **7 bean products** (p052–p058), not 5 drinks. Front: logo, name, price per kilo; back: the product's real options. Code: `js/bag.js`, `js/stage.js`, `css/stage.css`.
+> - **Drinks removed from the menu**; the menu is beans + bakery (13 items). Section 2 steps: بنختار أجود بن / بنحمّصه عندنا / وبنطحنه على كيفك / the bag's name. The builder (§13) uses the same 7 products.
+> - **No import map**: it would be an inline script, which the CSP forbids. `vendor/three/RoomEnvironment.js` imports `./three.module.min.js?v=6` directly; three loads only after the catalogue arrives.
+> - **Ink text, not cream,** on the coloured hero, section 2 and cards: cream on these colours is ~2:1 contrast. Hero colours are lightened where needed to reach ≥ 4.5:1 with ink.
+> - Nav labels: البن / حكايتنا / المنيو / اعمل كيسك. On phones the next arrow sits at the left edge beside the centre bag.
+> - The intro video is optional (`introVideo` in `js/config.js`); without it the logo stamp plays.
+
 Redesign the Divan Coffee (ديفان كوفي) ordering site so it looks and moves like the Stride reference page, while it stays a working Arabic ordering site. The page sells coffee and drinks from a cafe in X Mall, Fifth Settlement, Cairo. Its centrepiece is a real-time 3D takeaway cup (Three.js / WebGL). Every cup on the hero arc is 3D. The cup you pick in the hero then travels down the page as one object:
 - It flies into a pinned "from bean to cup" section and turns 180° at every step.
 - It spins through a storm of its own ingredients.
