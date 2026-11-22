@@ -9,26 +9,18 @@
     { name: "مطحون ناعم" }, { name: "مطحون وسط" }, { name: "حبوب صحيحة" }] };
 
   const categories = [
-    { id: "bakery", name: "المخبوزات", icon: "croissant", sort: 3 },
     { id: "blends", name: "توليفات البن", icon: "beans", sort: 1 },
     { id: "french", name: "بن فرنساوي", icon: "bag", sort: 2 }
   ];
 
-  // p001–p045 كانت المشروبات (اتشالت من المنيو) — العدّ بيبدأ من 45 عشان أكواد الأصناف الباقية ماتتغيرش
-  let n = 45;
+  // p001–p051 كانت المشروبات والمخبوزات (اتشالوا من المنيو) — العدّ بيبدأ من 51 عشان أكواد البن ماتتغيرش
+  let n = 51;
   const P = (category, name, price, extra) => Object.assign({
     id: "p" + String(++n).padStart(3, "0"), category, name, price,
     description: "", options: [], popular: false, active: true, image: "", sort: n
   }, extra || {});
 
   const products = [
-    // المخبوزات
-    P("bakery", "كرواسون سادة", 65),
-    P("bakery", "كرواسون جبنة", 85),
-    P("bakery", "كرواسون تركي", 90),
-    P("bakery", "كرواسون لوز", 80),
-    P("bakery", "كرواسون شوكولاتة", 80),
-    P("bakery", "كرواسون تركي بالجبنة", 95, { popular: true }),
     // توليفات البن — السعر للكيلو، والوزن بيضرب فيه
     P("blends", "توليفة ديفان", 800, { description: "توليفة البيت", options: [WEIGHT, { id: "spice", name: "التحويجة", type: "single", required: true, choices: [{ name: "سادة" }, { name: "محوّج", price: 80 }] }, ROAST, GRIND] }),
     P("blends", "توليفة سبيشيال", 1000, { options: [WEIGHT, { id: "spice", name: "التحويجة", type: "single", required: true, choices: [{ name: "سادة" }, { name: "محوّج", price: 120 }] }, ROAST, GRIND] }),

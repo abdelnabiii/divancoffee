@@ -5,7 +5,8 @@
 Cache version `?v=5` → `?v=6`. Spec: `prompts/divan-redesign-prompt.md` (see "As built" at the top).
 
 ### Menu
-- **Drinks removed** (hot drinks, iced coffee, cocktails, juices — 46 items). The menu is now coffee beans (4 blends, 3 French coffees) and bakery (6), 13 items. Product IDs of the remaining items are unchanged (`p046`–`p058`); categories ordered blends → French coffee → bakery.
+- **Drinks and bakery removed** (hot drinks, iced coffee, cocktails, juices, bakery — 51 items). The menu is now coffee only: 4 blends and 3 French coffees (7 items, `p052`–`p058`, IDs unchanged), blends first.
+- Demo mode uses a new storage key (`dv_demo_db_v3`) so earlier previews drop the old menu.
 
 ### New page (Stride-style), on top of the unchanged ordering logic
 - **Hero:** the 7 bean products as real-time 3D stand-up pouches on an arc (Three.js 0.160.0, self-hosted). Drag/flick, tap a bag, ← / → keys (RTL), next button, autoplay every 3.2 s; feathered colour circle in the bag's colour; name animated word by word (Arabic stays joined); live price + "اطلبه دلوقتي" opening the real product sheet.

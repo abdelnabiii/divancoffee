@@ -866,17 +866,10 @@ create policy "menu: admins delete" on storage.objects for delete to authenticat
 -- Generated from js/seed.js by tools/gen-seed.js — do not edit by hand.
 -- BEGIN SEED
 insert into public.categories (id, name, icon, sort, active) values
-  ('bakery', 'المخبوزات', 'croissant', 3, true),
   ('blends', 'توليفات البن', 'beans', 1, true),
   ('french', 'بن فرنساوي', 'bag', 2, true)
 on conflict (id) do nothing;
 insert into public.products (id, category, name, price, description, options, popular, active, available, image, sort) values
-  ('p046', 'bakery', 'كرواسون سادة', 65, '', '[]'::jsonb, false, true, true, '', 46),
-  ('p047', 'bakery', 'كرواسون جبنة', 85, '', '[]'::jsonb, false, true, true, '', 47),
-  ('p048', 'bakery', 'كرواسون تركي', 90, '', '[]'::jsonb, false, true, true, '', 48),
-  ('p049', 'bakery', 'كرواسون لوز', 80, '', '[]'::jsonb, false, true, true, '', 49),
-  ('p050', 'bakery', 'كرواسون شوكولاتة', 80, '', '[]'::jsonb, false, true, true, '', 50),
-  ('p051', 'bakery', 'كرواسون تركي بالجبنة', 95, '', '[]'::jsonb, true, true, true, '', 51),
   ('p052', 'blends', 'توليفة ديفان', 800, 'توليفة البيت', '[{"id":"weight","name":"الوزن","type":"single","required":true,"choices":[{"name":"ربع كيلو","factor":0.25},{"name":"نص كيلو","factor":0.5},{"name":"كيلو","factor":1}]},{"id":"spice","name":"التحويجة","type":"single","required":true,"choices":[{"name":"سادة"},{"name":"محوّج","price":80}]},{"id":"roast","name":"درجة التحميص","type":"single","required":true,"choices":[{"name":"فاتح"},{"name":"وسط"},{"name":"غامق","price":80}]},{"id":"grind","name":"الطحن","type":"single","required":true,"choices":[{"name":"مطحون ناعم"},{"name":"مطحون وسط"},{"name":"حبوب صحيحة"}]}]'::jsonb, false, true, true, '', 52),
   ('p053', 'blends', 'توليفة سبيشيال', 1000, '', '[{"id":"weight","name":"الوزن","type":"single","required":true,"choices":[{"name":"ربع كيلو","factor":0.25},{"name":"نص كيلو","factor":0.5},{"name":"كيلو","factor":1}]},{"id":"spice","name":"التحويجة","type":"single","required":true,"choices":[{"name":"سادة"},{"name":"محوّج","price":120}]},{"id":"roast","name":"درجة التحميص","type":"single","required":true,"choices":[{"name":"فاتح"},{"name":"وسط"},{"name":"غامق","price":80}]},{"id":"grind","name":"الطحن","type":"single","required":true,"choices":[{"name":"مطحون ناعم"},{"name":"مطحون وسط"},{"name":"حبوب صحيحة"}]}]'::jsonb, false, true, true, '', 53),
   ('p054', 'blends', 'توليفة VIP', 1200, 'أعلى توليفة عندنا', '[{"id":"weight","name":"الوزن","type":"single","required":true,"choices":[{"name":"ربع كيلو","factor":0.25},{"name":"نص كيلو","factor":0.5},{"name":"كيلو","factor":1}]},{"id":"spice","name":"التحويجة","type":"single","required":true,"choices":[{"name":"سادة"},{"name":"محوّج","price":120}]},{"id":"roast","name":"درجة التحميص","type":"single","required":true,"choices":[{"name":"فاتح"},{"name":"وسط"},{"name":"غامق","price":80}]},{"id":"grind","name":"الطحن","type":"single","required":true,"choices":[{"name":"مطحون ناعم"},{"name":"مطحون وسط"},{"name":"حبوب صحيحة"}]}]'::jsonb, false, true, true, '', 54),

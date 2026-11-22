@@ -8,18 +8,18 @@ Tick list for everything the site needs but doesn't have yet. Reply **skip** to 
 - **Plain background** (wood, marble or a single colour), **daylight or soft light**, no flash.
 - **Phone camera is fine.** Send the original file (not a WhatsApp-compressed copy if you can avoid it). I convert it to WebP, max 900 px, quality 85, saved as `assets/menu/<id>.webp`.
 
-## Product photos (13) — the drinks were removed from the menu in v6
-The 7 coffee products already have a designed 3D bag (drawn in code from the menu data), so their photos are optional — send a photo of the real bag only if you want it shown in the menu rows. Bakery photos are still useful.
+## Product photos — optional
+The menu is coffee only (7 products, drinks and bakery removed in v6). Each one already has a designed 3D bag drawn in code from the menu data, so photos are optional: send a photo of your real bag (front, plain background) only if you want it shown in the menu rows.
 
-| # | ID | Product | Shot needed | Status |
-|---|---|---|---|---|
-| 1 | p051 | كرواسون تركي بالجبنة ★ | On a plate, 45°, one cut open to show the filling | ⬜ |
-| 2 | p046 | كرواسون سادة | Plain croissant on a plate, 45° | ⬜ |
-| 3 | p047 | كرواسون جبنة | Cheese croissant, 45°, cut to show filling | ⬜ |
-| 4 | p048 | كرواسون تركي | Turkish croissant, 45° | ⬜ |
-| 5 | p049 | كرواسون لوز | Almond croissant, 45°, almonds visible | ⬜ |
-| 6 | p050 | كرواسون شوكولاتة | Chocolate croissant, 45°, cut to show filling | ⬜ |
-| 7–13 | p052–p058 | the 7 coffee products | Optional: your real bag, front, plain background | ⬜ optional |
+| ID | Product | Status |
+|---|---|---|
+| p052 | توليفة ديفان | ⬜ optional |
+| p053 | توليفة سبيشيال | ⬜ optional |
+| p054 | توليفة VIP | ⬜ optional |
+| p055 | بن إسبريسو | ⬜ optional |
+| p056 | بن فرنساوي | ⬜ optional |
+| p057 | بن فرنساوي بندق قطع | ⬜ optional |
+| p058 | بن فرنساوي نكهات | ⬜ optional |
 
 ## Other assets the site doesn't have
 | Item | Why | Status |
@@ -42,6 +42,6 @@ The 7 coffee products already have a designed 3D bag (drawn in code from the men
 | Delivery fee / minimum order / tables | 30 ج / 0 / 15 | ⬜ |
 | Cashback | 10 %, max 100 points per order, 1 point = 1 ج | ⬜ |
 | Social links | facebook.com/divancoffee.eg, instagram.com/divancoffee.eg, tiktok.com/@divancoffee.eg | ⬜ |
-| Every price vs the printed menu | 58 prices in `js/seed.js` | ⬜ |
+| Every price vs the printed menu | 7 prices in `js/seed.js` | ⬜ |
 | Demo coupon `DIVAN10` (10 %, min 100 ج) | not in the live database yet | ⬜ |
 | Admin email | — | ⬜ |

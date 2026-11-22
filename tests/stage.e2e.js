@@ -123,7 +123,7 @@ const stopAuto = p => p.evaluate(() => { const a = document.getElementById("auto
   await p.click(`#cards .card[data-pid="${live.id}"] .add`); await sleep(500);
   ok((await p.$eval("#shTitle", e => e.textContent)) === cur, "card + opens the product sheet");
   await p.keyboard.press("Escape"); await sleep(400);
-  ok(await p.$("#rail a") !== null && (await p.$$eval("#menuRoot .row", e => e.length)) === 13, "full menu (beans + bakery, 13 items) still below the cards");
+  ok(await p.$("#rail a") !== null && (await p.$$eval("#menuRoot .row", e => e.length)) === 7, "full menu (7 coffee products) still below the cards");
 
   sec("Build your bag");
   await p.evaluate(() => document.getElementById("beans").scrollIntoView()); await sleep(1200);

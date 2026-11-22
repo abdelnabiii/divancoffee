@@ -58,13 +58,14 @@ const shot = (p, n, full) => p.screenshot({ path: `${OUT}/${n}.png`, fullPage: !
   await p.goto(BASE); await p.waitForSelector(".row");
   ok(await p.$eval("#demoBar", e => !e.hidden), "demo bar visible in demo mode");
   ok(await p.$eval("#acctBtn", e => !!e.querySelector("svg")) && await p.$eval("#cartBtn", e => !!e.querySelector("svg")), "header icons rendered");
-  await p.click('.row[data-pid="p047"]'); await sleep(300);
+  await p.click('.row[data-pid="p056"]'); await sleep(300);
+  await p.click('.grp[data-g="weight"] .chip[data-i="0"]'); await p.click('.grp[data-g="grind"] .chip[data-i="0"]');
   await p.click("#addBtn"); await sleep(400);
   const toastTop = await p.$eval("#toast", e => e.getBoundingClientRect().top);
   ok(toastTop < 80, `toast near the top after adding (${Math.round(toastTop)}px)`);
   await p.click("#cartBarBtn"); await sleep(300);
-  await p.fill("#iCoupon", "DIVAN10"); await p.click("#cpnBtn"); await sleep(400);
-  ok((await p.$eval("#cartBody .msg", e => e.innerText)) === "الكود ده لطلبات من 100 ج", "coupon below its minimum explained");
+  await p.fill("#iCoupon", "NOPE99"); await p.click("#cpnBtn"); await sleep(400);
+  ok((await p.$eval("#cartBody .msg", e => e.innerText)) === "الكود ده مش موجود", "invalid coupon explained");
   await p.fill("#iCoupon", ""); await p.click("#cpnBtn"); await sleep(200);
   ok(!(await p.$("#cartBody .msg")), "clearing the field removes a coupon that didn't apply (was stuck before)");
   await p.click("[data-map]"); await sleep(2500);
@@ -168,8 +169,8 @@ const shot = (p, n, full) => p.screenshot({ path: `${OUT}/${n}.png`, fullPage: !
     sec("Against a real backend (" + BURL + ")");
     const c5 = await ctx(browser, { mode: "backend", url: BURL, key: BKEY }); const pg = await c5.newPage(); const be = watch(pg);
     await pg.goto(BBASE); await pg.waitForSelector(".row", { timeout: 15000 });
-    ok(await pg.$$eval(".row", e => e.length) === 13, "13 products from the backend");
-    await pg.click('.row[data-pid="p046"]'); await sleep(300); await pg.click("#addBtn"); await sleep(300);
+    ok(await pg.$$eval(".row", e => e.length) === 7, "7 products from the backend");
+    await pg.click('.row[data-pid="p056"]'); await sleep(300); await pg.click('.grp[data-g="weight"] .chip[data-i="0"]'); await pg.click('.grp[data-g="grind"] .chip[data-i="0"]'); await pg.click("#addBtn"); await sleep(300);
     await pg.click("#cartBarBtn"); await sleep(400); await pg.click('#segType [data-m="pickup"]');
     await pg.fill("#iName", "اختبار متصفح"); await pg.fill("#iPhone", "0155" + String(Date.now()).slice(-7)); await pg.click("#placeBtn");
     await pg.waitForSelector("#trackBody .no", { timeout: 10000 });

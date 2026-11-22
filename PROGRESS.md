@@ -25,7 +25,7 @@
 - Current zip = release candidate: rebuild after the Supabase key + domain are in (build warns until then).
 
 - **v6 redesign built** (`?v=6`): travelling 3D coffee bag (Stride-style) — hero arc of the 7 bean products, pinned "من الحبة للفنجان" with flips + storm, landing on its card, "اعمل كيسك" builder, new header, intro, phone layout, no-WebGL fallback. `tests/stage.e2e.js` 71/71; `site.e2e.js` 52/52; `rpc.test.js` 131/131. Release zip 49 files / 966 KB.
-- **Drinks removed from the menu** (46 items): 13 items left (beans + bakery); IDs unchanged; tests moved to bakery items.
+- **Drinks and bakery removed from the menu** (51 items): coffee only, 7 products, IDs unchanged; tests moved to coffee items with options (بن إسبريسو ¼ kg = 200 ج). All suites pass: rpc 131, site 52, stage 71.
 - The claude.ai share link you sent could not be read from here (it only renders in a browser) — paste its text if it matters.
 
 ## Blocked
