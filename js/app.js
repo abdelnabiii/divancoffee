@@ -26,7 +26,8 @@
   const catOf = p => CAT.categories.find(c => c.id === p.category);
   const artFor = p => ART[(catOf(p) || {}).icon] || ART.cup;
   const illFor = p => p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : artFor(p);
-  const saveCart = () => { store.set("dv_cart", cart); renderCartBar(); };
+  const emit = (name, detail) => document.dispatchEvent(new CustomEvent("dv:" + name, { detail }));
+  const saveCart = () => { store.set("dv_cart", cart); renderCartBar(); emit("cart", { count: cart.reduce((a, c) => a + c.qty, 0) }); };
   const saveForm = () => store.set("dv_form", form);
 
   function toast(msg, ms = 2400) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(t._h); t._h = setTimeout(() => t.hidden = true, ms); }
@@ -295,16 +296,23 @@
           return toast("لازم تختار " + miss.map(g => g.name).join(" و "));
         }
         const note = $("#pdNote").value.trim().slice(0, 120);
-        const clean = {}; Object.keys(sel).forEach(k => { if (sel[k].length) clean[k] = sel[k].slice().sort(); });
-        const key = p.id + "|" + JSON.stringify(clean) + "|" + note;
         if (existing) cart = cart.filter(c => c.key !== existing.key);
-        const same = cart.find(c => c.key === key);
-        if (same) same.qty = Math.min(50, same.qty + qty); else cart.push({ key, pid: p.id, sel: clean, qty, note });
-        saveCart(); $("#cartBar").classList.remove("bump"); void $("#cartBar").offsetWidth; $("#cartBar").classList.add("bump");
+        const from = sh.querySelector(".pd-top .ph, .pd-top .ill");
+        addLine(p.id, sel, qty, note, existing ? null : from);
         if (existing) openCart(); else { closeSheet(); toast(`اتضاف: ${p.name}`); }
       };
       paint();
     });
+  }
+
+  /* بيضيف سطر للسلة (من شيت الصنف أو من أقسام الصفحة) — from: عنصر الصورة اللي "بيطير" للسلة */
+  function addLine(pid, sel, qty, note, from) {
+    const clean = {}; Object.keys(sel || {}).forEach(k => { if ((sel[k] || []).length) clean[k] = sel[k].map(Number).sort(); });
+    const key = pid + "|" + JSON.stringify(clean) + "|" + (note || "");
+    const same = cart.find(c => c.key === key);
+    if (same) same.qty = Math.min(50, same.qty + qty); else cart.push({ key, pid, sel: clean, qty, note: note || "" });
+    saveCart(); $("#cartBar").classList.remove("bump"); void $("#cartBar").offsetWidth; $("#cartBar").classList.add("bump");
+    emit("added", { pid, qty, rect: from ? from.getBoundingClientRect() : null, src: from || null });
   }
 
   /* ---------- السلة والطلب ---------- */
@@ -459,8 +467,8 @@
     if (window.L) return Promise.resolve();
     if (leafletP) return leafletP;
     leafletP = new Promise((res, rej) => {
-      const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "vendor/leaflet/leaflet.css?v=5"; document.head.appendChild(css);
-      const js = document.createElement("script"); js.src = "vendor/leaflet/leaflet.js?v=5"; js.onload = res; js.onerror = () => { leafletP = null; rej(); };
+      const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "vendor/leaflet/leaflet.css?v=6"; document.head.appendChild(css);
+      const js = document.createElement("script"); js.src = "vendor/leaflet/leaflet.js?v=6"; js.onload = res; js.onerror = () => { leafletP = null; rej(); };
       document.head.appendChild(js);
     });
     return leafletP;
@@ -683,8 +691,15 @@
     openCart(); if (skipped) toast(`${skipped} صنف مبقاش متاح فاتشال`);
   }
 
+  /* واجهة صغيرة لـ js/stage.js (التصميم الجديد) — المنطق كله فاضل هنا */
+  window.DV.app = {
+    get cat() { return CAT; }, get loaded() { return loaded; }, get me() { return me; },
+    byId, openProduct: pid => { const p = byId(pid); if (p) openProduct(p); }, addLine, openCart, toast,
+    isOut: pid => { const p = byId(pid); return !p || p.available === false; }
+  };
+
   /* ---------- التشغيل ---------- */
-  function renderAll() { renderHeader(); renderModes(); renderMenu(); renderVisit(); renderLoyal(); }
+  function renderAll() { renderHeader(); renderModes(); renderMenu(); renderVisit(); renderLoyal(); emit("catalog", CAT); }
 
   $("#heroArt").innerHTML = ART.hero; $("#sprig").innerHTML = ART.sprig;
   $("#cartBtn").onclick = openCart; $("#cartBarBtn").onclick = openCart;

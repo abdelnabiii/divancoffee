@@ -1,0 +1,20 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="../../css/fonts.css">
+<style>body{margin:0;background:#b07a4f}canvas#g{display:block}#s{display:flex;gap:6px;background:#eee;padding:6px;align-items:end}#s canvas{width:110px}</style></head>
+<body><canvas id="g" width="1600" height="560"></canvas><div id="s"></div>
+<script type="module">
+import * as THREE from "../../vendor/three/three.module.min.js?v=6";
+import { RoomEnvironment } from "../../vendor/three/RoomEnvironment.js?v=6";
+import { BAGS, BH, ready, bagFactory, bagSprite, bitCanvas } from "../../js/bag.js?v=6";
+const SEED = await (await fetch("../../js/seed.js")).text(); const m = { exports: {} }; new Function("module", SEED)(m); const prods = m.exports.products;
+await ready();
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById("g"), antialias: true, alpha: true }); r.outputColorSpace = THREE.SRGBColorSpace;
+const sc = new THREE.Scene(), env = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), 0.04).texture;
+sc.add(new THREE.AmbientLight(0xffffff, .55)); const k = new THREE.DirectionalLight(0xffffff, 1.1); k.position.set(.6,.9,1.4); sc.add(k);
+const D = 1500, cam = new THREE.PerspectiveCamera(2*Math.atan(280/D)*180/Math.PI, 1600/560, 10, 6000); cam.position.z = D;
+const F = bagFactory(THREE, env, 8), back = location.search.includes("back");
+BAGS.forEach((b, i) => { const p = prods.find(x => x.id === b.id); const c = F.make(); c.setBag(b, p); c.setOpacity(1, 1);
+  c.obj.position.x = (3 - i) * 215; c.obj.scale.setScalar(400 / BH); c.obj.rotation.set(0, back ? Math.PI : (i - 3) * 0.12, 0); sc.add(c.obj);
+  document.getElementById("s").append(bagSprite(b, p)); });
+for (let i = 0; i < 6; i++) document.getElementById("s").append(bitCanvas(i));
+r.render(sc, cam); document.body.dataset.done = 1;
+</script></body></html>
