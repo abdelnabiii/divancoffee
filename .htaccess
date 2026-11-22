@@ -18,7 +18,7 @@ AddDefaultCharset utf-8
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # ملفات التطوير مالهاش مكان على السيرفر لو اترفعت بالغلط
-  RewriteRule ^(\.git|tests|tools|supabase|audit|node_modules)(/|$) - [F,L]
+  RewriteRule ^(\.git|tests|tools|supabase|audit|prompts|node_modules)(/|$) - [F,L]
   RewriteRule (^|/)(README|DEPLOY|CHANGELOG|AUDIT|PROGRESS|MISSING)\.md$ - [F,L]
 </IfModule>
 
