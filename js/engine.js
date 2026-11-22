@@ -62,7 +62,7 @@
   Object.assign(window.DV, { r2, money, lineUnit, phoneNorm, couponDiscount, distKm, validLL, ZONE_MSG, STATUS, TYPES });
 
   /* ================= نسخة العرض (localStorage) ================= */
-  const KEY = "dv_demo_db_v1";
+  const KEY = "dv_demo_db_v2";   // v2: المنيو من غير المشروبات (v6)
   const rand = n => Array.from(crypto.getRandomValues(new Uint8Array(n)), b => b.toString(16).padStart(2, "0")).join("");
   async function sha(s) {
     const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("dv|" + s));
