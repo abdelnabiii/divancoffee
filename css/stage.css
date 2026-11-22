@@ -171,6 +171,10 @@ body.stage #beans { display: block; position: relative; background: var(--dark);
 .b-btn { height: max(48px, calc(54 * var(--w))); padding: 0 28px; border-radius: 99px; background: var(--cream); color: var(--dark); font: 700 max(15px, calc(16 * var(--w))) var(--body); flex: 1; max-width: 340px; transition: .2s; }
 .b-btn:disabled { opacity: .45; } .b-btn.done { background: var(--ok); color: #fff; opacity: 1; }
 
+/* شريط السلة مستخبي طول ما الهيرو قدامك */
+body.stage .cartbar { transition: opacity .3s, visibility .3s; }
+body.stage.hero-on .cartbar { opacity: 0; visibility: hidden; pointer-events: none; }
+
 /* الطيران للسلة */
 .fly { filter: drop-shadow(0 10px 14px rgba(0,0,0,.25)); object-fit: contain; }
 

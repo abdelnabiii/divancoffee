@@ -318,7 +318,8 @@ function bindHero() {
   arc.addEventListener("pointerup", e => end(e, false));
   arc.addEventListener("pointercancel", e => end(e, true));
   // الهيرو باين قد إيه (للتشغيل التلقائي والكيبورد)
-  new IntersectionObserver(es => es.forEach(x => heroVis = x.intersectionRatio), { threshold: [0, .25, .5, .6, .75, 1] }).observe($("#hero"));
+  // شريط "كمّل طلبك" بيستخبى طول ما الهيرو قدامك (كان بيغطي "اطلبه دلوقتي") — زرار السلة في الهيدر موجود دايمًا
+  new IntersectionObserver(es => es.forEach(x => { heroVis = x.intersectionRatio; body.classList.toggle("hero-on", heroVis >= 0.35); }), { threshold: [0, .25, .35, .5, .6, .75, 1] }).observe($("#hero"));
 }
 const shortest = (from, to) => { let d = to - from; if (d > N / 2) d -= N; if (d < -N / 2) d += N; return d; };
 let lastStates = [];

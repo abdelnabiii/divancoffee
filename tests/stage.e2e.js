@@ -91,6 +91,8 @@ const stopAuto = p => p.evaluate(() => { const a = document.getElementById("auto
   ok(await p.$(".fly") !== null, "bag flies to the cart");
   await sleep(1100);
   ok((await p.$eval("#cartCount", e => e.textContent)) === "1", "cart badge = 1");
+  const cl = await p.evaluate(() => { const r = document.getElementById("hbuy").getBoundingClientRect(); const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return { onCta: !!(el && el.closest("#hbuy")), barVis: getComputedStyle(document.getElementById("cartBar")).visibility }; });
+  ok(cl.onCta && cl.barVis === "hidden", "with items in the cart, the hero CTA stays clickable (cart bar hidden over the hero)", cl);
 
   sec("From bean to cup: pinned steps, flips, storm");
   const ins = await p.$eval("#inside", e => ({ top: e.getBoundingClientRect().top + scrollY, h: e.offsetHeight }));
@@ -123,6 +125,7 @@ const stopAuto = p => p.evaluate(() => { const a = document.getElementById("auto
   await p.click(`#cards .card[data-pid="${live.id}"] .add`); await sleep(500);
   ok((await p.$eval("#shTitle", e => e.textContent)) === cur, "card + opens the product sheet");
   await p.keyboard.press("Escape"); await sleep(400);
+  ok(await p.$eval("#cartBar", e => getComputedStyle(e).visibility) === "visible", "cart bar back once past the hero");
   ok(await p.$("#rail a") !== null && (await p.$$eval("#menuRoot .row", e => e.length)) === 7, "full menu (7 coffee products) still below the cards");
 
   sec("Build your bag");
